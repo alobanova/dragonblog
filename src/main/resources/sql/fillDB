@@ -1,0 +1,23 @@
+INSERT INTO public."User"(
+    nickname, password, name, surname, patronymic, sex, date_of_birth, city, about_me)
+VALUES ('user1', 'password1', 'Иван','Иванов', 'Иванович', 'MALE', '1970-02-11', 'Москва', 'О себе...');
+
+INSERT INTO public."User"(
+    nickname, password, name, surname, patronymic, sex, date_of_birth, city, about_me)
+VALUES ('user2', 'password', 'Люба','Медведева', 'Николаевна', 'FEMALE', '1998-01-01', null, null);
+
+INSERT INTO public."Post"(
+    id_author, date, description)
+VALUES (2, '2019-07-03 10:00', 'Мой пост1');
+
+INSERT INTO public."Post"(
+    id_author, date, description)
+VALUES (2, '2019-07-03 10:30', 'Мой пост2');
+
+INSERT INTO public."Comment"(
+    id_author, id_post, date, description)
+VALUES (1, 1, '2019-07-03 11:30', 'Мой комментарий');
+
+INSERT INTO public."Comment"(
+    id_author, id_post, date, description)
+VALUES (1, 2, '2019-07-03 11:35', 'Мой комментарий2');
