@@ -1,0 +1,38 @@
+CREATE TABLE "User"
+(
+    id              bigserial               NOT NULL,
+    nickname        character varying(60)   NOT NULL,
+    password        character varying(60)   NOT NULL,
+    name            character varying(60)   NOT NULL,
+    surname         character varying(60)   NOT NULL,
+    patronymic      character varying(60),
+    sex             character varying(10)   NOT NULL,
+    date_of_birth   date,
+    city            character varying(60),
+    about_me        text,
+    PRIMARY KEY (id)
+);
+create unique index on "User" (nickname);
+
+CREATE TABLE "Post"
+(
+    id              bigserial               NOT NULL,
+    id_author       bigint                  NOT NULL,
+    date            time without time zone  NOT NULL,
+    description     text NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_author) REFERENCES "User" (id)
+);
+
+CREATE TABLE "Comment"
+(
+    id              bigserial               NOT NULL,
+    id_author       bigint                  NOT NULL,
+    id_post         bigint                  NOT NULL,
+    date            time without time zone  NOT NULL,
+    description     text                    NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_author) REFERENCES "User" (id),
+    FOREIGN KEY (id_post) REFERENCES "Post" (id)
+);
+
