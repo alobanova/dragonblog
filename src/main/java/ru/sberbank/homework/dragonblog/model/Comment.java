@@ -1,27 +1,42 @@
 package ru.sberbank.homework.dragonblog.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static javax.persistence.GenerationType.SEQUENCE;
 
 /**
  * Created by Mart
  * 30.06.2019
  **/
+@Getter
+@Setter
 @NoArgsConstructor
-public class Comment extends AbstractBaseEntity {
-    @Getter @Setter
+@EqualsAndHashCode(of = {"id", "post", "author"})
+@ToString(exclude = {"post", "author"})
+@Table(name="COMMENT")
+@Entity
+@SequenceGenerator(name = "COMMENT_SEQ", sequenceName = "COMMENT_SEQ", allocationSize = 5)
+public class Comment {
+
+    @Id
+    @GeneratedValue(strategy = SEQUENCE, generator = "COMMENT_SEQ")
+    private Long id;
+
+    @Column(nullable = false)
+    @JoinColumn(name = "POST_ID")
     private Post post;
 
-    @Getter @Setter
+    @Column(nullable = false)
+    @JoinColumn(name = "USER_ID")
     private User author;
 
-    @Getter @Setter
+    @Column(nullable = false)
     private LocalDateTime dateTime;
 
-    @Getter @Setter
+    @Column(nullable = false)
     private String text;
 
 }
