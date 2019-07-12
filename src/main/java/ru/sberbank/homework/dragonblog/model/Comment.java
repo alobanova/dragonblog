@@ -18,18 +18,18 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @ToString(exclude = {"post", "author"})
 @Table(name="COMMENT")
 @Entity
-@SequenceGenerator(name = "COMMENT_SEQ", sequenceName = "COMMENT_SEQ", allocationSize = 5)
+@SequenceGenerator(name = "COMMENT_SEQ", sequenceName = "COMMENT_SEQ", allocationSize = 1)
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "COMMENT_SEQ")
     private Long id;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POST_ID")
     private Post post;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User author;
 
