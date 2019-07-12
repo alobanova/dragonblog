@@ -31,10 +31,10 @@ public class Post {
     @JoinColumn(name = "id_author")
     private User author;
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private LocalDateTime postDateTime;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String Description;
 
     private byte[] photo = null;

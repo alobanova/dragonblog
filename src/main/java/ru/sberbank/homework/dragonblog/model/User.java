@@ -25,23 +25,23 @@ public class User {
     @SequenceGenerator(name = "User_id_seq", sequenceName = "User_id_seq")
     private Long id;
 
-    @Column(name = "nickname", unique = true)
+    @Column(name = "nickname", unique = true, nullable = false)
     private String nickname;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String firstName;
 
-    @Column(name = "surname")
+    @Column(name = "surname", nullable = false)
     private String surname;
 
     @Column(name = "patronymic")
     private String patronymic;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sex")
+    @Column(name = "sex", nullable = false)
     private Gender gender;
 
     @Column(name = "date_of_birth")
