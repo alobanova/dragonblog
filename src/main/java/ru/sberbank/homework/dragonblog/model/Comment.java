@@ -14,6 +14,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = {"id", "post", "author"})
 @ToString(exclude = {"post", "author"})
 @Table(name="COMMENT")
@@ -26,17 +27,17 @@ public class Comment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POST_ID")
+    @JoinColumn(name = "ID_POST")
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "ID_AUTHOR")
     private User author;
 
     @Column(nullable = false)
-    private LocalDateTime dateTime;
+    private LocalDateTime date;
 
     @Column(nullable = false)
-    private String text;
+    private String description;
 
 }
