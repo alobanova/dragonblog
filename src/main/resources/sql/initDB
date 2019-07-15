@@ -1,4 +1,4 @@
-CREATE TABLE "User"
+CREATE TABLE users
 (
     id              bigserial               NOT NULL,
     nickname        character varying(60)   NOT NULL,
@@ -12,19 +12,19 @@ CREATE TABLE "User"
     about_me        text,
     PRIMARY KEY (id)
 );
-create unique index on "User" (nickname);
+create unique index on users (nickname);
 
-CREATE TABLE "Post"
+CREATE TABLE posts
 (
     id              bigserial               NOT NULL,
     id_author       bigint                  NOT NULL,
     date            time without time zone  NOT NULL,
     description     text NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (id_author) REFERENCES "User" (id)
+    FOREIGN KEY (id_author) REFERENCES users (id)
 );
 
-CREATE TABLE "Comment"
+CREATE TABLE comments
 (
     id              bigserial               NOT NULL,
     id_author       bigint                  NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE "Comment"
     date            time without time zone  NOT NULL,
     description     text                    NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (id_author) REFERENCES "User" (id),
-    FOREIGN KEY (id_post) REFERENCES "Post" (id)
+    FOREIGN KEY (id_author) REFERENCES users (id),
+    FOREIGN KEY (id_post) REFERENCES posts (id)
 );
 
