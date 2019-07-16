@@ -1,0 +1,72 @@
+$v-app-loading-text: "Dark Valo";
+$v-background-color: #444d50;
+$v-focus-color: #61D7A4;
+$v-focus-style: 0 0 3px 2px $v-focus-color;
+$v-bevel-depth: 40%;
+$v-gradient: v-linear 12%;
+$v-border-radius: 10px;
+$v-font-family: Roboto, sans-serif;
+$v-font-weight: 400;
+$v-font-weight--header: 400;
+$v-bevel: inset 0 1px 2px v-tint, inset 0 0 1px (v-tint 0.1);
+$v-shadow: 0 0 0 3px rgba(0,0,0,0.32), 0 1px 0 3px rgba(255,255,255,0.14);
+$v-textfield-bevel: inset 0 2px 2px v-shade;
+$v-textfield-shadow: $v-shadow;
+$v-unit-size: 40px;
+$v-overlay-shadow: 0 0 0 3px (v-shade 8), 0 5px 10px (v-shade 4);
+$v-component-group-spacing: 6px;
+
+@import "../valo/valo.scss";
+
+
+@mixin metro {
+  @include valo;
+
+  .valothemeui #themeSelect {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    padding: 0 10px;
+    background-color: #ededed;
+    background-color: rgba(237, 237, 237, 0.9);
+    color: #464646;
+    border-radius: 0 0 0 4px;
+  }
+
+  .valothemeui #themeSelect:before {
+    content: "Theme:";
+  }
+
+  .valothemeui #themeSelect select {
+    background: transparent;
+    color: inherit;
+    border: none;
+    display: inline-block;
+  }
+
+  .valothemeui .v-ui[width-range~="0-800px"] #themeSelect {
+    top: 37px;
+  }
+
+  .valothemeui .v-splitpanel-vertical,
+  .valothemeui .v-splitpanel-horizontal {
+    outline: 1px dotted rgba(128, 128, 128, 0.2);
+  }
+
+  .valothemeui .valo-content > .v-layout {
+    max-width: 960px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .padding-10px {
+    margin-left: 20px;
+    padding: 10px;
+  }
+
+}
