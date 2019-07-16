@@ -1,7 +1,5 @@
 package ru.sberbank.homework.dragonblog.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,14 +17,14 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@ToString
+@ToString (exclude =  {"posts"})
 @Getter
 @Setter
 public class User {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
-    @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq")
+    @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq" , allocationSize = 1)
     private Long id;
 
     @Column(name = "nickname", unique = true, nullable = false)

@@ -1,16 +1,12 @@
 package ru.sberbank.homework.dragonblog.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,7 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "posts")
 @NoArgsConstructor
-@ToString
+@ToString (exclude =  {"comments"})
 @Getter
 @Setter
 public class Post {
@@ -29,7 +25,7 @@ public class Post {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "posts_id_seq")
-    @SequenceGenerator(name = "posts_id_seq", sequenceName = "posts_id_seq")
+    @SequenceGenerator(name = "posts_id_seq", sequenceName = "posts_id_seq", allocationSize = 1)
     private Long id;
 
     //@JsonIgnore
