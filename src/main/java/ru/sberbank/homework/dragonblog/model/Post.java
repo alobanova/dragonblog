@@ -1,12 +1,16 @@
 package ru.sberbank.homework.dragonblog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,19 +19,21 @@ import java.util.Objects;
  * 30.06.2019
  **/
 @Entity
-@Table(name = "Post")
+@Table(name = "posts")
 @NoArgsConstructor
+@ToString
 @Getter
 @Setter
 public class Post {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Post_id_seq")
-    @SequenceGenerator(name = "Post_id_seq", sequenceName = "Post_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "posts_id_seq")
+    @SequenceGenerator(name = "posts_id_seq", sequenceName = "posts_id_seq")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    //@JsonIgnore
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_author")
     private User author;
 
@@ -35,10 +41,11 @@ public class Post {
     private LocalDateTime postDateTime;
 
     @Column(name = "description", nullable = false)
-    private String Description;
+    private String description;
 
-    private byte[] photo = null;
+    //private byte[] photo = null;
 
+    //@JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments;
 

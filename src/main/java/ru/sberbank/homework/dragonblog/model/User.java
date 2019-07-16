@@ -1,8 +1,11 @@
 package ru.sberbank.homework.dragonblog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,15 +17,16 @@ import java.util.Objects;
  * 30.06.2019
  **/
 @Entity
-@Table(name = "User")
+@Table(name = "users")
 @NoArgsConstructor
+@ToString
 @Getter
 @Setter
 public class User {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "User_id_seq")
-    @SequenceGenerator(name = "User_id_seq", sequenceName = "User_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
+    @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq")
     private Long id;
 
     @Column(name = "nickname", unique = true, nullable = false)
@@ -53,12 +57,13 @@ public class User {
     @Column(name = "about_me")
     private String description;
 
+    //@JsonIgnore
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Post> posts;
 
-    private byte[] photo;
+    //private byte[] photo;
 
-    private Role role;
+    //private Role role;
 
 //    @Getter @Setter
 //    private List<User> favorite;

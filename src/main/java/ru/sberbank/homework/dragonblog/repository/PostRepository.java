@@ -1,5 +1,7 @@
 package ru.sberbank.homework.dragonblog.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import ru.sberbank.homework.dragonblog.model.Post;
 
 import java.time.LocalDateTime;
@@ -9,19 +11,14 @@ import java.util.List;
  * Возможно имеет смысл все репозитории сделать через Spring Data Repository
  * пока не помню детали
  * */
-public interface PostRepository {
-    // null if post do not belong to userId
-    Post save(Post post, long userId);
 
-    // false if comment do not belong to author
-    boolean delete(long id, long userId);
+@Repository
+public interface PostRepository extends JpaRepository<Post, Long> {
 
-    // null if not found
-    Post get(long id);
+    //List<Post> findAllByAuthor(long userId);
 
-    List<Post> getAllByUser(long userId);
+    //List<Post> getAllBySearchString(String search);
 
-    List<Post> getAllBySearchString(String search);
+    //List<Post> findAllByPostDateTime(LocalDateTime dateTime);
 
-    List<Post> getAllByDate(LocalDateTime dateTime);
 }
