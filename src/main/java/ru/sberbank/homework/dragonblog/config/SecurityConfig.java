@@ -24,20 +24,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("user").password(encoder().encode("userPass")).roles("USER");
     }
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().disable()
-//                .exceptionHandling()
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers("/dragonblog/all").authenticated()
-//                .antMatchers("/dragonblog/admin/**").hasRole("ADMIN")
-//                .and()
-//                .formLogin()
-//                .and()
-//                .logout();
-//    }
+    @Override
+    protected void configure(final HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.csrf().disable();
+    }
 
     @Bean
     public PasswordEncoder encoder() {
