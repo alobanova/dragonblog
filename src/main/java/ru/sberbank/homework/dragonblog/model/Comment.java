@@ -16,8 +16,8 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id", "post", "author"})
-@ToString
-@Table(name="COMMENT")
+@ToString(exclude = {"post", "author"})
+@Table(name="comments")
 @Entity
 @SequenceGenerator(name = "COMMENT_SEQ", sequenceName = "COMMENT_SEQ", allocationSize = 1)
 public class Comment {
