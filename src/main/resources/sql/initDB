@@ -16,21 +16,21 @@ create unique index on users (nickname);
 
 CREATE TABLE posts
 (
-    id              bigserial               NOT NULL,
-    id_author       bigint                  NOT NULL,
-    date            time without time zone  NOT NULL,
-    description     text NOT NULL,
+    id              bigserial                       NOT NULL,
+    id_author       bigint                          NOT NULL,
+    date            timestamp(2) without time zone  NOT NULL,
+    description     text                            NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_author) REFERENCES users (id)
 );
 
 CREATE TABLE comments
 (
-    id              bigserial               NOT NULL,
-    id_author       bigint                  NOT NULL,
-    id_post         bigint                  NOT NULL,
-    date            time without time zone  NOT NULL,
-    description     text                    NOT NULL,
+    id              bigserial                       NOT NULL,
+    id_author       bigint                          NOT NULL,
+    id_post         bigint                          NOT NULL,
+    date            timestamp(2) without time zone  NOT NULL,
+    description     text                            NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_author) REFERENCES users (id),
     FOREIGN KEY (id_post) REFERENCES posts (id)
