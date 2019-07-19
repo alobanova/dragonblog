@@ -1,12 +1,12 @@
 package ru.sberbank.homework.dragonblog.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.sberbank.homework.dragonblog.model.Comment;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CommentRepository extends CrudRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     boolean deleteByIdAndAuthorId(long id, long authorId);
 
