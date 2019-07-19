@@ -27,7 +27,7 @@ public final class ValoMenu extends CssLayout {
         ValoMenuItemButton(final DashboardViewType view) {
             this.view = view;
             setPrimaryStyleName("valo-menu-item");
-            setStyleName("padding-10px");
+            setStyleName("menu-item");
             setIcon(view.getIcon());
             setCaption(view.getCaption().substring(0, 1).toUpperCase()
                     + view.getCaption().substring(1));

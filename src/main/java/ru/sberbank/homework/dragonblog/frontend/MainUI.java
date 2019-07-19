@@ -14,7 +14,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -30,15 +29,20 @@ import javax.servlet.annotation.WebServlet;
 @Theme("metro")
 @Title("DragonBlog")
 public class MainUI extends UI {
-    @Autowired
-    private SpringViewProvider viewProvider;
-    @Autowired
-    private SpringNavigator navigator;
+    private final SpringViewProvider viewProvider;
+    private final SpringNavigator navigator;
 
     private final VerticalLayout topLevelLayout = new VerticalLayout();
     private final HorizontalLayout contentLayout = new HorizontalLayout();
+    private final HorizontalLayout pageLayout = new HorizontalLayout();
+
     private final HorizontalSplitPanel contentPanel = new HorizontalSplitPanel();
-    private final Panel page = new Panel();
+
+    public MainUI(
+            final SpringViewProvider viewProvider, final SpringNavigator navigator) {
+        this.viewProvider = viewProvider;
+        this.navigator = navigator;
+    }
 
     @Override
     protected void init(VaadinRequest request) {
@@ -52,7 +56,7 @@ public class MainUI extends UI {
         topLevelLayout.setSpacing(false);
         setContent(topLevelLayout);
 
-        navigator.init(this, page);
+        navigator.init(this, pageLayout);
         navigator.setErrorView(ErrorView.class);
         navigator.addProvider(viewProvider);
         initTitle();
@@ -75,27 +79,39 @@ public class MainUI extends UI {
     private Component buildTitle() {
         Label logo = new Label("<strong>Dragon</strong>Blog",
                 ContentMode.HTML);
+        logo.setSizeFull();
         logo.setStyleName("title");
+
         HorizontalLayout logoWrapper = new HorizontalLayout(logo);
-        logoWrapper.setComponentAlignment(logo, Alignment.TOP_LEFT);
-        logoWrapper.addStyleName("valo-menu-title");
+        logoWrapper.setPrimaryStyleName("valo-menu-title");
         logoWrapper.setSpacing(false);
+
         return logoWrapper;
     }
 
     private void initContent() {
-        page.setSizeFull();
+
+        VerticalLayout stub = new VerticalLayout();
+        stub.setSizeFull();
+
+        VerticalLayout stub2 = new VerticalLayout();
+        stub.setSizeFull();
 
         contentPanel.setSizeFull();
-        contentPanel.setSplitPosition(15, Unit.PERCENTAGE);
-
-        contentPanel.addComponent(new ValoMenu());
-        contentPanel.addComponent(page);
+        contentPanel.setSplitPosition(25, Unit.PERCENTAGE);
+        contentPanel.setLocked(true);
+        pageLayout.setSizeFull();
+        contentPanel.addComponents(new ValoMenu(), pageLayout);
 
         contentLayout.setSizeFull();
-        contentLayout.addComponent(contentPanel);
+        contentLayout.setMargin(true);
+        contentLayout.addComponents(stub, contentPanel, stub2);
+        contentLayout.setExpandRatio(stub, 2);
+        contentLayout.setExpandRatio(contentPanel,10);
+        contentLayout.setExpandRatio(stub2, 3);
+
         topLevelLayout.addComponent(contentLayout);
-        topLevelLayout.setExpandRatio(contentLayout, 15);
+        topLevelLayout.setExpandRatio(contentLayout, 20);
     }
 
     @WebServlet(urlPatterns = {"/*", "/VAADIN/*"}, name = "AppServlet", asyncSupported = true)
