@@ -6,6 +6,7 @@ import ru.sberbank.homework.dragonblog.model.Post;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Возможно имеет смысл все репозитории сделать через Spring Data Repository
@@ -15,7 +16,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    //List<Post> findAllByAuthor(long userId);
+    Optional<List<Post>> findAllByAuthorIdOrderByPostDateTime(long userId);
 
     //List<Post> getAllBySearchString(String search);
 
