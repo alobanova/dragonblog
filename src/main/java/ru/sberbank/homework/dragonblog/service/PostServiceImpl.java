@@ -2,11 +2,14 @@ package ru.sberbank.homework.dragonblog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.sberbank.homework.dragonblog.frontend.converter.PostConverter;
+import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.model.Post;
 import ru.sberbank.homework.dragonblog.repository.PostRepository;
 import ru.sberbank.homework.dragonblog.util.NotFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,56 +17,55 @@ import java.util.List;
  * 01.07.2019
  **/
 @Service
-public class PostServiceImpl implements PostService {
+public class PostServiceImpl {
     private PostRepository repository;
+    private final PostConverter converter;
 
     @Autowired
-    public PostServiceImpl(PostRepository repository) {
+    public PostServiceImpl(PostRepository repository, PostConverter converter) {
         this.repository = repository;
+        this.converter = converter;
     }
 
-    @Override
-    public Post get(long id) throws NotFoundException {
-        return repository.findById(id).orElseThrow(null);
-    }
+    public UiPost get(long id) throws NotFoundException {
+        Post post = repository.findById(id).orElse(null);
 
-    @Override
-    public boolean delete(long id, long userId) throws NotFoundException {
-        Post post = get(id);
-
-        if(post.getAuthor().getId() != userId) {
-            return false;
+        if (post != null) {
+            return converter.convert(post);
         }
 
-        repository.deleteById(id);
-        return true;
+        return null;
     }
-    @Override
-    public Post update(Post post, long userId) throws NotFoundException {
+
+    public void delete(long id, long userId) throws NotFoundException {
+        repository.deleteByIdAndAuthorId(id, userId);
+    }
+
+    public UiPost update(Post post, long userId) throws NotFoundException {
         if(post.getAuthor().getId() == userId) {
             repository.save(post);
-            return post;
+            return converter.convert(post);
         }
         return null;
     }
 
-    @Override
-    public Post create(Post post, long userId) {
+    public UiPost create(Post post, long userId) {
         return update(post, userId);
     }
 
-    @Override
-    public List<Post> getAllByUser(long userId) {
-        return repository.findAllByAuthorIdOrderByPostDateTime(userId).orElse(null);
+    public List<UiPost> getAllByUser(long userId) {
+        List<Post> posts = repository.findAllByAuthorIdOrderByPostDateTime(userId).orElse(Collections.emptyList());
+
+        return converter.convert(posts);
     }
 
-    @Override
-    public List<Post> getAllBySearchString(String search) {
+    public List<UiPost> getAllBySearchString(String search) {
         return null;
     }
 
-    @Override
-    public List<Post> getAllByDate(LocalDateTime dateTime) {
-        return null;
+    public List<UiPost> getAllByDate(LocalDateTime dateTime) {
+        List<Post> posts = repository.findAllByPostDateTimeOrderByPostDateTime(dateTime);
+
+        return converter.convert(posts);
     }
 }
