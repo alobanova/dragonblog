@@ -7,17 +7,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PostService {
-    Post get(long id) throws NotFoundException;
+    Post get(int id) throws NotFoundException;
 
     // false if post do not belong to author
-    boolean delete(long id, long userId) throws NotFoundException;
+    boolean delete(int id, int userId) throws NotFoundException;
 
     // null if post do not belong to author
-    Post update(Post post, long userId) throws NotFoundException;
+    Post update(Post post, int userId) throws NotFoundException;
 
-    Post create(Post post, long userId);
+    Post create(Post post, int userId);
 
-    List<Post> getAllByUser(long userId);
+    List<Post> getAllByUser(int userId);
 
     //will find in uniquename
     List<Post> getAllBySearchString(String search);

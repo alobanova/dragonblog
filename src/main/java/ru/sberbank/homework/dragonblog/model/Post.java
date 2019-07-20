@@ -28,6 +28,7 @@ public class Post {
     @SequenceGenerator(name = "posts_id_seq", sequenceName = "posts_id_seq", allocationSize = 1)
     private Long id;
 
+    //@JsonIgnore
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_author")
     private User author;
@@ -40,6 +41,7 @@ public class Post {
 
     //private byte[] photo = null;
 
+    //@JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments;
 

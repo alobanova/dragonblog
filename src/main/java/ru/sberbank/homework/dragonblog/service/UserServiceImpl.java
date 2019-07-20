@@ -27,12 +27,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User get(long id) throws NotFoundException {
-        return repository.findById(id).orElseThrow(null);
+    public User get(int id) throws NotFoundException {
+        return null;
     }
 
     @Override
-    public boolean delete(long id) throws NotFoundException {
+    public boolean delete(int id) throws NotFoundException {
         return false;
     }
 

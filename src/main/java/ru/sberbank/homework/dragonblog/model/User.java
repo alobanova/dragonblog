@@ -56,7 +56,7 @@ public class User {
     private String description;
 
     //@JsonIgnore
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private List<Post> posts;
 
     //private byte[] photo;
