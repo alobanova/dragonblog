@@ -15,8 +15,7 @@ import java.util.List;
  **/
 @Service
 public class PostServiceImpl implements PostService {
-    private  PostRepository repository;
-
+    private PostRepository repository;
 
     @Autowired
     public PostServiceImpl(PostRepository repository) {
@@ -24,28 +23,38 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post get(int id) throws NotFoundException {
+    public Post get(long id) throws NotFoundException {
+        return repository.findById(id).orElseThrow(null);
+    }
+
+    @Override
+    public boolean delete(long id, long userId) throws NotFoundException {
+        Post post = get(id);
+
+        if(post.getAuthor().getId() != userId) {
+            return false;
+        }
+
+        repository.deleteById(id);
+        return true;
+    }
+    @Override
+    public Post update(Post post, long userId) throws NotFoundException {
+        if(post.getAuthor().getId() == userId) {
+            repository.save(post);
+            return post;
+        }
         return null;
     }
 
     @Override
-    public boolean delete(int id, int userId) throws NotFoundException {
-        return false;
+    public Post create(Post post, long userId) {
+        return update(post, userId);
     }
 
     @Override
-    public Post update(Post post, int userId) throws NotFoundException {
-        return null;
-    }
-
-    @Override
-    public Post create(Post post, int userId) {
-        return null;
-    }
-
-    @Override
-    public List<Post> getAllByUser(int userId) {
-        return null;
+    public List<Post> getAllByUser(long userId) {
+        return repository.findAllByAuthorIdOrderByPostDateTime(userId).orElse(null);
     }
 
     @Override

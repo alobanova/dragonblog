@@ -42,7 +42,7 @@ public class Post {
     //private byte[] photo = null;
 
     //@JsonIgnore
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @Override
