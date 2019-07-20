@@ -47,7 +47,8 @@ public class ProfileView extends HorizontalLayout implements View {
 
         imageLayout.setSizeFull();
         imageLayout.setMargin(false);
-        infoLayout.setSizeFull();
+        infoLayout.setWidth(100, Unit.PERCENTAGE);
+        infoLayout.setHeightUndefined();
         infoLayout.setMargin(false);
 
         addComponents(imageLayout, infoLayout);
@@ -95,7 +96,7 @@ public class ProfileView extends HorizontalLayout implements View {
         data.setSpacing(false);
         data.setStyleName("data-about");
 
-        String fio = String.format("%s %s %s", user.getFirstName(), user.getSurname(), user.getPatronymic());
+        String fio = String.format("%s %s %s", user.getSurname(), user.getFirstName(), user.getPatronymic());
 
         data.addComponent(new Label("<strong>ФИО: </strong>" + fio, ContentMode.HTML));
         data.addComponent(new Label("<strong>День рождения: </strong>" + user.getBirthDate(), ContentMode.HTML));
