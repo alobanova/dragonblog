@@ -1,6 +1,7 @@
 package ru.sberbank.homework.dragonblog.model;
 
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Table(name="comments")
 @Entity
 @SequenceGenerator(name = "COMMENT_SEQ", sequenceName = "COMMENT_SEQ", allocationSize = 1)
+@Transactional
 public class Comment {
 
     @Id

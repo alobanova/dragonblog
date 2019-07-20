@@ -51,6 +51,7 @@ public class MainUI extends UI {
     }
 
     private void initView() {
+        topLevelLayout.setSizeUndefined();
         topLevelLayout.setSizeFull();
         topLevelLayout.setMargin(false);
         topLevelLayout.setSpacing(false);
@@ -90,28 +91,20 @@ public class MainUI extends UI {
     }
 
     private void initContent() {
-
-        VerticalLayout stub = new VerticalLayout();
-        stub.setSizeFull();
-
-        VerticalLayout stub2 = new VerticalLayout();
-        stub.setSizeFull();
-
-        contentPanel.setSizeFull();
-        contentPanel.setSplitPosition(25, Unit.PERCENTAGE);
-        contentPanel.setLocked(true);
         pageLayout.setSizeFull();
+
+        contentPanel.setWidth(1300, Unit.PIXELS);
+        contentPanel.setSplitPosition(20, Unit.PERCENTAGE);
+        contentPanel.setLocked(true);
         contentPanel.addComponents(new ValoMenu(), pageLayout);
 
         contentLayout.setSizeFull();
         contentLayout.setMargin(true);
-        contentLayout.addComponents(stub, contentPanel, stub2);
-        contentLayout.setExpandRatio(stub, 2);
-        contentLayout.setExpandRatio(contentPanel,10);
-        contentLayout.setExpandRatio(stub2, 3);
+        contentLayout.addComponents(contentPanel);
+        contentLayout.setComponentAlignment(contentPanel, Alignment.MIDDLE_CENTER);
 
         topLevelLayout.addComponent(contentLayout);
-        topLevelLayout.setExpandRatio(contentLayout, 20);
+        topLevelLayout.setExpandRatio(contentLayout, 19);
     }
 
     @WebServlet(urlPatterns = {"/*", "/VAADIN/*"}, name = "AppServlet", asyncSupported = true)

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @ToString (exclude =  {"posts"})
 @Getter
 @Setter
+@Transactional
 public class User {
     @Id
     @Column(name = "id")
