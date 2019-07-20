@@ -13,7 +13,7 @@ import java.util.Locale;
 public class UserConverter implements Converter<User, UiUser> {
 
     private final PostConverter postConverter;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.mm.YYYY", Locale.getDefault());
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.YYYY", Locale.getDefault());
 
     public UserConverter(PostConverter postConverter) {
         this.postConverter = postConverter;

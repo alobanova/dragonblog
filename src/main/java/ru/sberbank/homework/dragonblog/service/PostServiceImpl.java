@@ -2,6 +2,7 @@ package ru.sberbank.homework.dragonblog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.homework.dragonblog.frontend.converter.PostConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.model.Post;
@@ -17,6 +18,7 @@ import java.util.List;
  * 01.07.2019
  **/
 @Service
+@Transactional
 public class PostServiceImpl {
     private PostRepository repository;
     private final PostConverter converter;
@@ -31,6 +33,7 @@ public class PostServiceImpl {
         Post post = repository.findById(id).orElse(null);
 
         if (post != null) {
+            post.getComments().size();
             return converter.convert(post);
         }
 

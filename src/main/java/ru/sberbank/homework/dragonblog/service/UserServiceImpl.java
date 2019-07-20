@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.model.User;
@@ -17,6 +18,7 @@ import java.util.List;
  * 01.07.2019
  **/
 @Service
+@Transactional
 public class UserServiceImpl {
 
     private final UserRepository repository;
@@ -31,6 +33,13 @@ public class UserServiceImpl {
     }
 
     public UiUser get(long id) throws NotFoundException {
+        User user = repository.findById(id);
+
+        if (user != null) {
+            user.getPosts().size();
+            return converter.convert(user);
+        }
+
         return null;
     }
 

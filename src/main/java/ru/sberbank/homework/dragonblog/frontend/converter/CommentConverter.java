@@ -15,7 +15,7 @@ import java.util.Locale;
 public class CommentConverter implements Converter<Comment, UiComment> {
 
     private final DateTimeFormatter formatter = DateTimeFormatter
-            .ofPattern("HH:MM:SS dd.mm.YYYY", Locale.getDefault())
+            .ofPattern("HH:MM:SS dd.MM.YYYY", Locale.getDefault())
             .withZone(ZoneOffset.UTC);
 
     @Override

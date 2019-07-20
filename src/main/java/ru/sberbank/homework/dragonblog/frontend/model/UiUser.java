@@ -1,6 +1,7 @@
 package ru.sberbank.homework.dragonblog.frontend.model;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * 01.07.2019
  **/
 
+@Getter
 @Builder
 public class UiUser {
 

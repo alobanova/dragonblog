@@ -11,8 +11,6 @@ import java.util.List;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 
-
-    // null if not found
     User findById(long id);
 
 }

@@ -15,7 +15,7 @@ public class PostConverter implements Converter<Post, UiPost> {
 
     private final CommentConverter commentConverter;
     private final DateTimeFormatter formatter = DateTimeFormatter
-            .ofPattern("HH:MM:SS dd.mm.YYYY", Locale.getDefault());
+            .ofPattern("HH:MM:SS dd.MM.YYYY", Locale.getDefault());
 
     public PostConverter(CommentConverter commentConverter) {
         this.commentConverter = commentConverter;
