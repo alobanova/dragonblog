@@ -17,8 +17,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import ru.sberbank.homework.dragonblog.frontend.util.ValoMenu;
 import ru.sberbank.homework.dragonblog.frontend.views.ErrorView;
 import ru.sberbank.homework.dragonblog.frontend.views.ProfileView;
@@ -52,7 +50,6 @@ public class MainUI extends UI {
 
     private void initView() {
         topLevelLayout.setSizeFull();
-        topLevelLayout.setSizeUndefined();
         topLevelLayout.setMargin(false);
         topLevelLayout.setSpacing(false);
         setContent(topLevelLayout);
@@ -93,14 +90,16 @@ public class MainUI extends UI {
     private void initContent() {
         pageLayout.setSizeFull();
 
-        contentPanel.setWidth(1300, Unit.PIXELS);
-        contentPanel.setSplitPosition(20, Unit.PERCENTAGE);
+        int width = (int) (getPage().getBrowserWindowWidth() / 1.5);
+
+        contentPanel.setWidth(width, Unit.PIXELS);
+        contentPanel.setSplitPosition(25, Unit.PERCENTAGE);
         contentPanel.setLocked(true);
         contentPanel.addComponents(new ValoMenu(), pageLayout);
 
         contentLayout.setSizeFull();
-        contentLayout.setMargin(true);
-        contentLayout.addComponents(contentPanel);
+        contentLayout.setStyleName("no-margin");
+        contentLayout.addComponent(contentPanel);
         contentLayout.setComponentAlignment(contentPanel, Alignment.MIDDLE_CENTER);
 
         topLevelLayout.addComponent(contentLayout);

@@ -12,7 +12,7 @@ import ru.sberbank.homework.dragonblog.frontend.views.SearchView;
 public enum DashboardViewType {
     PROFILE("profile", "Профиль", ProfileView.class, VaadinIcons.MALE, true),
     SEARCH("search", "Поиск", SearchView.class, VaadinIcons.SEARCH, false),
-    EDIT("register", "Редактировать профиль", RegisterView.class, VaadinIcons.EDIT, false),
+    EDIT("register", "Редактировать", RegisterView.class, VaadinIcons.EDIT, false),
     EXIT("exit", "Выход",null, VaadinIcons.SIGN_OUT, false);
 
     private final String viewName;
