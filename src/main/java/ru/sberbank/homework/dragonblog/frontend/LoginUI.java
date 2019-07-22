@@ -29,6 +29,7 @@ public class LoginUI extends UI {
     private PasswordField passwordField;
     private Button loginBtn;
     private Button registerBtn;
+    private CheckBox rememberMe;
 
     private Label loginFailedLabel;
     private Label loggedOutLabel;
@@ -46,6 +47,7 @@ public class LoginUI extends UI {
         loginBtn = new Button("Login");
         registerBtn = new Button("Register");
         registerBtn.addClickListener(register());
+        rememberMe = new CheckBox("Remember me");
 
         loginBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         loginBtn.setDisableOnClick(true);
@@ -56,6 +58,7 @@ public class LoginUI extends UI {
         loginForm.addComponent(passwordField);
         horizontalLayout.addComponent(loginBtn);
         horizontalLayout.addComponent(registerBtn);
+        loginForm.addComponent(rememberMe);
         loginForm.addComponent(horizontalLayout);
 
         VerticalLayout loginLayout = new VerticalLayout();
@@ -88,7 +91,7 @@ public class LoginUI extends UI {
 
     private void login() {
         try {
-            vaadinSecurity.login(userNameField.getValue(), passwordField.getValue(), false);
+            vaadinSecurity.login(userNameField.getValue(), passwordField.getValue(), rememberMe.getValue());
         } catch (AuthenticationException ex) {
             userNameField.focus();
             userNameField.selectAll();

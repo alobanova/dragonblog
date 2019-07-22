@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
 import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
@@ -72,6 +74,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                     .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
                 .and()
+                .rememberMe()
+                    .rememberMeServices(rememberMeServices()).key("DragonBlog")
+                .and()
                 .sessionManagement()
                     .sessionAuthenticationStrategy(sessionAuthenticationStrategy());
     }
@@ -90,5 +95,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new SessionFixationProtectionStrategy();
+    }
+
+    @Bean
+    public RememberMeServices rememberMeServices() {
+        return new TokenBasedRememberMeServices("DragonBlog", userDetailsService);
     }
 }
