@@ -52,6 +52,7 @@ public class MainUI extends UI {
         topLevelLayout.setSizeFull();
         topLevelLayout.setMargin(false);
         topLevelLayout.setSpacing(false);
+        topLevelLayout.setHeight("-1px");
         setContent(topLevelLayout);
 
         navigator.init(this, pageLayout);

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Transactional
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Optional<List<Post>> findAllByAuthorIdOrderByPostDateTime(long userId);
+    Optional<List<Post>> findAllByAuthorIdOrderByPostDateTimeDesc(long userId);
 
     //List<Post> getAllBySearchString(String search);
 
