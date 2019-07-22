@@ -49,7 +49,9 @@
     </changeSet>
 
     <changeSet id="create foreign key from post to user" author="Gorskih" context="01.001.00">
-        <addForeignKeyConstraint baseTableName="POSTS" baseColumnNames="ID_AUTHOR" constraintName="FK_POST_ID_AUTHOR"
+        <addForeignKeyConstraint baseTableName="POSTS"
+                                 baseColumnNames="ID_AUTHOR"
+                                 constraintName="FK_POST_ID_AUTHOR"
                                  referencedTableName="USERS"
                                  referencedColumnNames="ID"/>
 

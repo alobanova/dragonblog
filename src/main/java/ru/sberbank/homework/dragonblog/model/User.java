@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by Mart
@@ -57,13 +58,16 @@ public class User {
     @Column(name = "about_me")
     private String description;
 
-    //@JsonIgnore
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Post> posts;
 
     //private byte[] photo;
 
-    //private Role role;
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Role> roles;
 
 //    @Getter @Setter
 //    private List<User> favorite;
