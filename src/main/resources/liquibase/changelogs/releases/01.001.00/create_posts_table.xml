@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create post sequence" author="Gorskih">
+        <createSequence sequenceName="POSTS_ID_SEQ"
+                        incrementBy="1"
+                        cycle="false"
+                        ordered="true"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE POSTS_ID_SEQ;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create post table" author="Gordkih" context="v01.001.00">
+        <comment>
+            Создание таблицы POSTS
+        </comment>
+
+        <createTable tableName="POSTS">
+
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" uniqueConstraintName="PK_ID_POST"/>
+            </column>
+
+            <column name="ID_AUTHOR" type="BIGINT">
+                <constraints nullable="false" uniqueConstraintName="UK_ID_AUTHOR_POST"/>
+            </column>
+
+            <column name="DATE" type="TIMESTAMP">
+                <constraints nullable="false" uniqueConstraintName="UK_DATE_POST"/>
+            </column>
+
+            <column name="DESCRIPTION" type="VARCHAR(256)">
+                <constraints nullable="false" uniqueConstraintName="UK_DESCRIPTION_POST"/>
+            </column>
+
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE POSTS;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create foreign key from post to user" author="Gorskih" context="01.001.00">
+        <addForeignKeyConstraint baseTableName="POSTS" baseColumnNames="ID_AUTHOR" constraintName="FK_POST_ID_AUTHOR"
+                                 referencedTableName="USERS"
+                                 referencedColumnNames="ID"/>
+
+        <rollback>
+            <sql>
+                ALTER TABLE POSTS DROP FOREIGN KEY FK_POST_AUTHOR_ID;
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

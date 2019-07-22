@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="add initial data to user" author="Gorskih" context="01.001.00">
+        <sql>
+            INSERT INTO USERS(id, nickname, password, name, surname, patronymic, sex, date_of_birth, city, about_me)
+            VALUES (USER_SEQ.NEXTVAL, '@vanya', 'password1', 'Иван','Иванов', 'Иванович', 'MALE', '1970-02-11', 'Москва', 'О доблестях, о подвигах, о славе
+            Я забывал на горестной земле,
+            Когда твое лицо в простой оправе
+            Перед мной сияло на столе.
+            Но час настал, и ты ушла из дому.
+            Я бросил в ночь заветное кольцо.
+            Ты отдала свою судьбу другому,
+            И я забыл прекрасное лицо.
+            Летели дни, крутясь проклятым роем...
+            Вино и страсть терзали жизнь мою...
+            И вспомнил я тебя пред аналоем,
+            И звал тебя, как молодость свою...
+            Я звал тебя, но ты не оглянулась,
+            Я слезы лил, но ты не снизошла.
+            Ты в синий плащ печально завернулась,
+            В сырую ночь ты из дому ушла.');
+
+            INSERT INTO USERS(id, nickname, password, name, surname, patronymic, sex, date_of_birth, city, about_me)
+            VALUES (USER_SEQ.NEXTVAL, 'user2', 'password', 'Люба','Медведева', 'Николаевна', 'FEMALE', '1998-01-01', null, null);
+        </sql>
+    </changeSet>
+
+    <changeSet id="add initial data to post" author="Gorskih" context="01.001.00">
+        <sql>
+            INSERT INTO POSTS(id, id_author, date, description)
+            VALUES (POSTS_ID_SEQ.NEXTVAL, 2, '2019-07-03 10:00:00', 'Мой пост1');
+
+            INSERT INTO POSTS(id, id_author, date, description)
+            VALUES (POSTS_ID_SEQ.NEXTVAL, 2, '2019-07-03 10:00:00', 'Мой пост2');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add initial data to comment" author="Gorskih" context="01.001.00">
+        <sql>
+            INSERT INTO COMMENTS(id, id_author, id_post, date, description)
+            VALUES (COMMENT_SEQ.NEXTVAL, 1, 1, '2019-07-03 10:00:00', 'Мой комментарий');
+
+            INSERT INTO COMMENTS(id, id_author, id_post, date, description)
+            VALUES (COMMENT_SEQ.NEXTVAL, 1, 2, '2019-07-03 10:00:00', 'Мой комментарий2');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

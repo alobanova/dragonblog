@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create user sequence" author="Gorskih" context="01.001.00">
+        <createSequence sequenceName="USER_SEQ"
+                        incrementBy="1"
+                        cycle="false"
+                        ordered="true"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE USER_SEQ;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create user table" author="Gorskih" context="v01.001.00">
+        <createTable tableName="USERS">
+
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" uniqueConstraintName="PK_ID_USER"/>
+            </column>
+
+            <column name="NICKNAME" type="VARCHAR(256)">
+                <constraints nullable="false" uniqueConstraintName="UK_NICKNAME_USER"/>
+            </column>
+
+            <column name="PASSWORD" type="VARCHAR(256)">
+                <constraints nullable="false" uniqueConstraintName="UK_PSW_USER"/>
+            </column>
+
+            <column name="NAME" type="VARCHAR(256)">
+                <constraints nullable="false" uniqueConstraintName="UK_NAME_USER"/>
+            </column>
+
+            <column name="SURNAME" type="VARCHAR(256)">
+                <constraints nullable="false" uniqueConstraintName="UK_SURNAME_USER"/>
+            </column>
+
+            <column name="PATRONYMIC" type="VARCHAR(256)"/>
+
+            <column name="SEX" type="VARCHAR(256)">
+                <constraints nullable="false" uniqueConstraintName="UK_SEX_USER"/>
+            </column>
+
+            <column name="DATE_OF_BIRTH" type="DATE" defaultValue="null"/>
+
+            <column name="CITY" type="VARCHAR(256)" defaultValue="null"/>
+
+            <column name="ABOUT_ME" type="VARCHAR(1000)" defaultValue="null"/>
+
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
