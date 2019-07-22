@@ -1,8 +1,8 @@
 INSERT INTO users(nickname, password, name, surname, patronymic, sex, date_of_birth, city, about_me)
-VALUES ('user1', 'password1', 'Иван','Иванов', 'Иванович', 'MALE', '1970-02-11', 'Москва', 'О себе...');
+VALUES ('user1', '$2a$10$NLz/YmHATnvJo8kXRdhrneB586vYVo3FPA.BR6LAbt/6hujzf6agC', 'Иван','Иванов', 'Иванович', 'MALE', '1970-02-11', 'Москва', 'О себе...');
 
 INSERT INTO users(nickname, password, name, surname, patronymic, sex, date_of_birth, city, about_me)
-VALUES ('user2', 'password', 'Люба','Медведева', 'Николаевна', 'FEMALE', '1998-01-01', null, null);
+VALUES ('user2', '$2a$10$kkzWn2cZFx/Y5RVY/juQ4ec8LvbbKZ6z1Z.BR1h2pixsjJPuLOj76', 'Люба','Медведева', 'Николаевна', 'FEMALE', '1998-01-01', null, null);
 
 INSERT INTO "posts"(id_author, date, description)
 VALUES (2, '2019-07-03 10:00', 'Мой пост1');
@@ -15,3 +15,9 @@ VALUES (1, 1, '2019-07-03 11:30', 'Мой комментарий');
 
 INSERT INTO "comments"(id_author, id_post, date, description)
 VALUES (1, 2, '2019-07-03 11:35', 'Мой комментарий2');
+
+INSERT INTO user_roles(user_id, role)
+VALUES (1, 'USER');
+
+INSERT INTO user_roles(user_id, role)
+VALUES (2, 'USER');
