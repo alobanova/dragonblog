@@ -8,7 +8,7 @@
     <changeSet id="add initial data to user" author="Gorskih" context="01.001.00">
         <sql>
             INSERT INTO USERS(id, nickname, password, name, surname, patronymic, sex, date_of_birth, city, about_me)
-            VALUES (USER_SEQ.NEXTVAL, '@vanya', 'password1', 'Иван','Иванов', 'Иванович', 'MALE', '1970-02-11', 'Москва', 'О доблестях, о подвигах, о славе
+            VALUES (USER_SEQ.NEXTVAL, '@vanya', '$2a$10$NLz/YmHATnvJo8kXRdhrneB586vYVo3FPA.BR6LAbt/6hujzf6agC', 'Иван','Иванов', 'Иванович', 'MALE', '1970-02-11', 'Москва', 'О доблестях, о подвигах, о славе
             Я забывал на горестной земле,
             Когда твое лицо в простой оправе
             Перед мной сияло на столе.
@@ -26,7 +26,7 @@
             В сырую ночь ты из дому ушла.');
 
             INSERT INTO USERS(id, nickname, password, name, surname, patronymic, sex, date_of_birth, city, about_me)
-            VALUES (USER_SEQ.NEXTVAL, 'user2', 'password', 'Люба','Медведева', 'Николаевна', 'FEMALE', '1998-01-01', null, null);
+            VALUES (USER_SEQ.NEXTVAL, 'user2', '$2a$10$kkzWn2cZFx/Y5RVY/juQ4ec8LvbbKZ6z1Z.BR1h2pixsjJPuLOj76', 'Люба','Медведева', 'Николаевна', 'FEMALE', '1998-01-01', null, 'Тра-та-та, я королева');
         </sql>
     </changeSet>
 
