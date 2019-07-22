@@ -50,4 +50,14 @@
         </sql>
     </changeSet>
 
+    <changeSet id="add initial data to user_roles" author="Gorskih" context="01.001.00">
+        <sql>
+            INSERT INTO USER_ROLES(user_id, role)
+            VALUES (1, 'ADMIN');
+
+            INSERT INTO USER_ROLES(user_id, role)
+            VALUES (2, 'USER');
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
