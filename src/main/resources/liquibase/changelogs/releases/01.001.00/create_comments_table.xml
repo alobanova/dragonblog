@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create comments sequence" author="Gorskih" context="01.001.00">
+        <createSequence sequenceName="COMMENT_SEQ"
+                        cycle="false"
+                        ordered="true"
+                        incrementBy="1"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE COMMENT_SEQ;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create comments table" author="Gorskih" context="v01.001.00">
+        <comment>
+            Создание таблицы COMMENTS
+        </comment>
+        <createTable tableName="COMMENTS">
+
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" uniqueConstraintName="PK_ID_COMMENT"/>
+            </column>
+
+            <column name="ID_POST" type="BIGINT">
+                <constraints nullable="false" uniqueConstraintName="UK_ID_POST_COMMENT"/>
+            </column>
+
+            <column name="ID_AUTHOR" type="BIGINT">
+                <constraints nullable="false" uniqueConstraintName="UK_ID_AUTHOR_COMMENT"/>
+            </column>
+
+            <column name="DATE" type="TIMESTAMP">
+                <constraints nullable="false" uniqueConstraintName="UK_TIME_COMMENT"/>
+            </column>
+
+            <column name="DESCRIPTION" type="VARCHAR(255)">
+                <constraints nullable="false" uniqueConstraintName="UK_DESCRIPTION_COMMENT"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <sql>
+                DROP TABLE COMMENTS;
+            </sql>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="create foreign key from comment to user" author="Gorskih" context="01.001.00">
+        <addForeignKeyConstraint baseTableName="COMMENTS"
+                                 baseColumnNames="ID_AUTHOR"
+                                 constraintName="FK_COMMENT_USER"
+                                 referencedTableName="USERS"
+                                 referencedColumnNames="ID"/>
+        <rollback>
+            <sql>
+                ALTER TABLE COMMENTS DROP FOREIGN KEY FK_COMMENT_USER;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create foreign key from comment to post" author="Gorskih">
+        <addForeignKeyConstraint baseTableName="COMMENTS"
+                                 baseColumnNames="ID_POST"
+                                 constraintName="FK_COMMENT_POST"
+                                 referencedTableName="POSTS"
+                                 referencedColumnNames="ID"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
+
+        <rollback>
+            <sql>
+                ALTER TABLE COMMENTS DROP FOREIGN KEY FK_COMMENT_POST;
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
