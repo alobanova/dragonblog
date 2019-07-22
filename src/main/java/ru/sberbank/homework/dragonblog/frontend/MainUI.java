@@ -17,6 +17,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.security.VaadinSecurity;
 import ru.sberbank.homework.dragonblog.frontend.util.ValoMenu;
 import ru.sberbank.homework.dragonblog.frontend.views.ErrorView;
 import ru.sberbank.homework.dragonblog.frontend.views.ProfileView;
@@ -29,6 +31,9 @@ import javax.servlet.annotation.WebServlet;
 public class MainUI extends UI {
     private final SpringViewProvider viewProvider;
     private final SpringNavigator navigator;
+
+    @Autowired
+    VaadinSecurity vaadinSecurity;
 
     private final VerticalLayout topLevelLayout = new VerticalLayout();
     private final HorizontalLayout contentLayout = new HorizontalLayout();
