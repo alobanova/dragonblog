@@ -49,7 +49,8 @@ public class MainUI extends UI {
     }
 
     private void initView() {
-        topLevelLayout.setSizeFull();
+        topLevelLayout.setWidth(100, Unit.PERCENTAGE);
+        topLevelLayout.setHeight("-1px");
         topLevelLayout.setMargin(false);
         topLevelLayout.setSpacing(false);
         setContent(topLevelLayout);

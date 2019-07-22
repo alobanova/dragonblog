@@ -7,8 +7,16 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.*;
+import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
+import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
+import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
 import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
 
 @SpringView(name = ProfileView.NAME)
 public class ProfileView extends HorizontalLayout implements View {
@@ -16,20 +24,27 @@ public class ProfileView extends HorizontalLayout implements View {
 
     private SpringNavigator navigator;
 
+    private PostServiceImpl postService;
+
     private final VerticalLayout imageLayout = new VerticalLayout();
     private final VerticalLayout infoLayout = new VerticalLayout();
 
     private final Panel imagePanel = new Panel();
     private final FormLayout info = new FormLayout();
-    private final Panel posts = new Panel("Posts");
+    private final FormLayout postsLayout = new FormLayout();
+
+    private UiUser user;
 
     private Image avatar;
 
     private final UserServiceImpl service;
 
-    public ProfileView(SpringNavigator navigator, UserServiceImpl service) {
+    public ProfileView(SpringNavigator navigator,
+                       UserServiceImpl service,
+                       PostServiceImpl postService) {
         this.navigator = navigator;
         this.service = service;
+        this.postService = postService;
     }
 
     @Override
@@ -120,10 +135,60 @@ public class ProfileView extends HorizontalLayout implements View {
     }
 
     private void initPostsPanel() {
-        posts.setSizeFull();
-        infoLayout.addComponent(posts);
+        postsLayout.setSizeFull();
+        infoLayout.addComponent(postsLayout);
 
         infoLayout.setExpandRatio(info, 3);
-        infoLayout.setExpandRatio(posts, 7);
+        infoLayout.setExpandRatio(postsLayout, 7);
+
+        user = service.get(2);
+
+        displayCreatePostPanel();
+
+        for (UiPost post : getListPosts()) {
+            postsLayout.addComponent(formPanelPost(post));
+        }
+    }
+
+    private List<UiPost> getListPosts() {
+        return postService.getAllByUser(user.getId());
+    }
+
+    private Panel formPanelPost(UiPost post) {
+        PostPanel postPanel = new PostPanel(postService);
+        return postPanel.getPanelPost(post, user, postsLayout);
+    }
+
+    private void displayCreatePostPanel() {
+        Panel panel = new Panel("Создание нового поста");
+        panel.setSizeFull();
+
+        VerticalLayout verticalLayout = new VerticalLayout();
+
+        TextArea textArea = new TextArea();
+        textArea.setPlaceholder("Начните писать ваш новый пост...");
+        textArea.setSizeFull();
+
+        Button create = new Button("Создать");
+
+        create.addClickListener((Button.ClickListener) event2 -> {
+            String newDescription = textArea.getValue();
+            textArea.setValue("");
+            //Чтото тут с проверкой не так на автора.. вседа же тру будет;
+            UiPost post = UiPost.builder()
+                    .author(user)
+                    .description(newDescription)
+                    .postDateTime(LocalDateTime.now().format(DateTimeFormatter
+                            .ofPattern("HH:mm:ss dd.MM.yyyy", Locale.getDefault())))
+                    .build();
+
+            postService.create(post, user.getId());
+            postsLayout.addComponent(formPanelPost(post), 1);
+        });
+
+        verticalLayout.addComponent(textArea);
+        verticalLayout.addComponent(create);
+        panel.setContent(verticalLayout);
+        postsLayout.addComponent(panel);
     }
 }

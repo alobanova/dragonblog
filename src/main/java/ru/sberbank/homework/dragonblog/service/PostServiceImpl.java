@@ -59,7 +59,7 @@ public class PostServiceImpl {
     }
 
     public List<UiPost> getAllByUser(long userId) {
-        List<Post> posts = repository.findAllByAuthorIdOrderByPostDateTime(userId).orElse(Collections.emptyList());
+        List<Post> posts = repository.findAllByAuthorIdOrderByPostDateTimeDesc(userId).orElse(Collections.emptyList());
 
         return converter.convert(posts);
     }
