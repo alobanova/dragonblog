@@ -7,7 +7,7 @@ import lombok.ToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,7 +49,7 @@ public class User {
     private Gender gender;
 
     @Column(name = "date_of_birth")
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "city")
     private String city;

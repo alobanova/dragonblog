@@ -10,8 +10,10 @@ import ru.sberbank.homework.dragonblog.repository.PostRepository;
 import ru.sberbank.homework.dragonblog.util.NotFoundException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Mart
@@ -44,15 +46,15 @@ public class PostServiceImpl {
         repository.deleteByIdAndAuthorId(id, userId);
     }
 
-    public UiPost update(Post post, long userId) throws NotFoundException {
+    public UiPost update(UiPost post, long userId) throws NotFoundException {
         if(post.getAuthor().getId() == userId) {
-            repository.save(post);
-            return converter.convert(post);
+            repository.save(converter.convertBack(post));
+            return post;
         }
         return null;
     }
 
-    public UiPost create(Post post, long userId) {
+    public UiPost create(UiPost post, long userId) {
         return update(post, userId);
     }
 
