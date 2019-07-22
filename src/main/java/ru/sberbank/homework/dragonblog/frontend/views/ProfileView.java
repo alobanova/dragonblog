@@ -173,17 +173,19 @@ public class ProfileView extends HorizontalLayout implements View {
 
         create.addClickListener((Button.ClickListener) event2 -> {
             String newDescription = textArea.getValue();
-            textArea.setValue("");
-            //Чтото тут с проверкой не так на автора.. вседа же тру будет;
-            UiPost post = UiPost.builder()
-                    .author(user)
-                    .description(newDescription)
-                    .postDateTime(LocalDateTime.now().format(DateTimeFormatter
-                            .ofPattern("HH:mm:ss dd.MM.yyyy", Locale.getDefault())))
-                    .build();
+            if(newDescription != null && !newDescription.isEmpty()) {
+                textArea.setValue("");
+                //Чтото тут с проверкой не так на автора.. вседа же тру будет;
+                UiPost post = UiPost.builder()
+                        .author(user)
+                        .description(newDescription)
+                        .postDateTime(LocalDateTime.now().format(DateTimeFormatter
+                                .ofPattern("HH:mm:ss dd.MM.yyyy", Locale.getDefault())))
+                        .build();
 
-            postService.create(post, user.getId());
-            postsLayout.addComponent(formPanelPost(post), 1);
+                post = postService.create(post, user.getId());
+                postsLayout.addComponent(formPanelPost(post), 1);
+            }
         });
 
         verticalLayout.addComponent(textArea);

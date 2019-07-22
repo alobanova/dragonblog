@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.homework.dragonblog.frontend.converter.PostConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
+import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.model.Post;
 import ru.sberbank.homework.dragonblog.repository.PostRepository;
 import ru.sberbank.homework.dragonblog.util.NotFoundException;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Created by Mart
@@ -48,8 +50,8 @@ public class PostServiceImpl {
 
     public UiPost update(UiPost post, long userId) throws NotFoundException {
         if(post.getAuthor().getId() == userId) {
-            repository.save(converter.convertBack(post));
-            return post;
+            Post postSave = repository.save(converter.convertBack(post));
+            return converter.convert(postSave);
         }
         return null;
     }

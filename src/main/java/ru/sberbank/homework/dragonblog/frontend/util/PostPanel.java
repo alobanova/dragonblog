@@ -15,9 +15,6 @@ public class PostPanel {
     private UiPost post;
     private FormLayout contentLayout;
 
-    private HorizontalLayout buttons = new HorizontalLayout();
-    private VerticalLayout postContent = new VerticalLayout();
-
     private Panel panel;
     private Label text;
     private TextArea textArea;
@@ -42,6 +39,9 @@ public class PostPanel {
         initButtonDelete();
         initButtonEdit();
         initButtonSave();
+
+        HorizontalLayout buttons = new HorizontalLayout();
+        VerticalLayout postContent = new VerticalLayout();
 
         buttons.setSizeFull();
 
@@ -122,10 +122,10 @@ public class PostPanel {
     private void initButtonSave() {
         save = new Button("Сохранить");
         save.setVisible(false);
-        save.addClickListener((Button.ClickListener) event2 -> saveNewPost());
+        save.addClickListener((Button.ClickListener) event2 -> updatePost());
     }
 
-    private void saveNewPost() {
+    private void updatePost() {
         String newDescription = textArea.getValue();
         post.setDescription(newDescription);
         postService.update(post, user.getId());
