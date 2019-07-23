@@ -2,6 +2,9 @@ package ru.sberbank.homework.dragonblog.frontend.converter;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
+
+import sun.util.resources.LocaleData;
+
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.model.Gender;
 import ru.sberbank.homework.dragonblog.model.User;
@@ -14,41 +17,57 @@ import java.util.Locale;
 @Component
 public class UserConverter implements Converter<User, UiUser> {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter
-            .ofPattern("dd.MM.yyyy", Locale.getDefault());
+    private static final DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("dd.MM.yyyy", Locale.ENGLISH);
 
     @Override
-    public UiUser convert(User source) {
-        String sex = source.getGender() == Gender.FEMALE ? "женский" : "мужской";
+    public UiUser convert(User user) {
+        String gender = user.getGender() == Gender.FEMALE ? "женский" : "мужской";
+        String patronymic = user.getPatronymic() == null ? "" : user.getPatronymic();
+        String city = user.getCity() == null ? "" : user.getCity();
+        String description = user.getDescription() == null ? "" : user.getDescription();
 
         return UiUser.builder()
-                .id(source.getId())
-                .nickname(source.getNickname())
-                .firstName(source.getFirstName())
-                .surname(source.getSurname())
-                .patronymic(source.getPatronymic())
-                .gender(sex)
-                .birthDate(formatter.format(source.getBirthDate()))
-                .city(source.getCity())
-                .description(source.getDescription())
+                .id(user.getId())
+                .nickname(user.getNickname())
+                .firstName(user.getFirstName())
+                .surname(user.getSurname())
+                .patronymic(patronymic)
+                .gender(gender)
+                .birthDate(convertDateToString(user.getBirthDate()))
+                .city(city)
+                .description(description)
+                .avatar(user.getAvatar())
                 .build();
     }
 
     public User convertBack(UiUser uiUser) {
         Gender gender = uiUser.getGender().equals("мужской") ? Gender.MALE : Gender.FEMALE;
+        String patronymic = uiUser.getPatronymic().equals("") ? null : uiUser.getPatronymic();
+        String city = uiUser.getCity().equals("") ? null : uiUser.getCity();
+        String description = uiUser.getDescription().equals("") ? null : uiUser.getDescription();
 
         User user = new User();
         user.setId(uiUser.getId());
         user.setNickname(uiUser.getNickname());
         user.setFirstName(uiUser.getFirstName());
         user.setSurname(uiUser.getSurname());
-        user.setPatronymic(uiUser.getPatronymic());
+        user.setPatronymic(patronymic);
         user.setGender(gender);
-        user.setBirthDate(LocalDate.parse(uiUser.getBirthDate(), formatter));
-        user.setCity(uiUser.getCity());
-        user.setDescription(uiUser.getDescription());
+        user.setBirthDate(convertStringToDate(uiUser.getBirthDate()));
+        user.setCity(city);
+        user.setAvatar(uiUser.getAvatar());
+        user.setDescription(description);
 
         return user;
+    }
+
+    public static LocalDate convertStringToDate(String date) {
+        return date.equals("") ? null : LocalDate.parse(date, formatter);
+    }
+
+    public static String convertDateToString(LocalDate date) {
+        return date == null ? "" : formatter.format(date);
     }
 
 }

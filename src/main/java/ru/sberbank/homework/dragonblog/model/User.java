@@ -58,10 +58,11 @@ public class User {
     @Column(name = "about_me")
     private String description;
 
+    @Column(name = "avatar")
+    private byte[] avatar;
+
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Post> posts;
-
-    //private byte[] photo;
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
