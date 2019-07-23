@@ -33,7 +33,7 @@ public class UserServiceImpl {
 
     public UiUser get(String nickname) {
         User user = repository.findByNickname(nickname);
-        return converter.convert(user);
+        return user != null ? converter.convert(user) : null;
     }
 
     public UiUser get(long id) throws NotFoundException {
