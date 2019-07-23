@@ -2,17 +2,16 @@ package ru.sberbank.homework.dragonblog.frontend.util;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 
 import ru.sberbank.homework.dragonblog.frontend.views.ProfileView;
-import ru.sberbank.homework.dragonblog.frontend.views.RegisterView;
+import ru.sberbank.homework.dragonblog.frontend.views.EditView;
 import ru.sberbank.homework.dragonblog.frontend.views.SearchView;
 
 public enum DashboardViewType {
     PROFILE("profile", "Профиль", ProfileView.class, VaadinIcons.MALE, true),
     SEARCH("search", "Поиск", SearchView.class, VaadinIcons.SEARCH, false),
-    EDIT("register", "Редактировать", RegisterView.class, VaadinIcons.EDIT, false),
+    EDIT("register", "Редактировать", EditView.class, VaadinIcons.EDIT, false),
     EXIT("exit", "Выход",null, VaadinIcons.SIGN_OUT, false);
 
     private final String viewName;

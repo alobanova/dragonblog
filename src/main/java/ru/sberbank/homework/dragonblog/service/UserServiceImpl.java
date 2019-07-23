@@ -1,21 +1,20 @@
 package ru.sberbank.homework.dragonblog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.model.User;
 import ru.sberbank.homework.dragonblog.repository.UserRepository;
 import ru.sberbank.homework.dragonblog.util.NotFoundException;
 
-import java.util.List;
-
 /**
- * Created by Mart
- * 01.07.2019
+ * Created by Mart 01.07.2019
  **/
 @Service
 @Transactional
@@ -47,8 +46,20 @@ public class UserServiceImpl {
         return false;
     }
 
-    public UiUser update(User user) throws NotFoundException {
-        return null;
+    public UiUser update(long id, User user) throws NotFoundException {
+        if (id != user.getId()) {
+            return null;
+        }
+        repository.update(id, user.getFirstName(), user.getSurname(), user.getPatronymic(),
+                user.getGender(), user.getCity(), user.getBirthDate(), user.getDescription(), user.getAvatar());
+
+        return converter.convert(user);
+    }
+
+    public UiUser update(long id, UiUser uiUser) throws NotFoundException {
+        User user = converter.convertBack(uiUser);
+
+        return update(id, user);
     }
 
     public UiUser create(User user) {
