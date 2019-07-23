@@ -52,6 +52,8 @@
 
             <column name="ABOUT_ME" type="VARCHAR(1000)" defaultValue="null"/>
 
+            <column name="AVATAR" type="BLOB" defaultValue="null"/>
+
         </createTable>
     </changeSet>
 

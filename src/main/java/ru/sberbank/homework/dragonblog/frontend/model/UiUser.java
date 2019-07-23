@@ -32,5 +32,7 @@ public class UiUser {
 
     private String description;
 
+    private byte[] avatar;
+
     private List<UiPost> posts;
 }
