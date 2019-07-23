@@ -28,11 +28,11 @@ public class Comment {
     @GeneratedValue(strategy = SEQUENCE, generator = "COMMENT_SEQ")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_POST")
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_AUTHOR")
     private User author;
 
