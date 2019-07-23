@@ -132,10 +132,14 @@ public class EditView extends VerticalLayout implements View {
         String about = fields.getAbout().getValue();
 
         byte[] bytes = null;
-        try {
-            bytes = Files.readAllBytes(newAvatar.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(newAvatar != null) {
+            try {
+                bytes = Files.readAllBytes(newAvatar.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            bytes = user.getAvatar();
         }
 
         UiUser uiUser = UiUser.builder()
@@ -149,6 +153,7 @@ public class EditView extends VerticalLayout implements View {
                 .description(about)
                 .avatar(bytes)
                 .build();
+
 
         service.update(user.getId(), uiUser);
         navigator.navigateTo(ProfileView.NAME);
