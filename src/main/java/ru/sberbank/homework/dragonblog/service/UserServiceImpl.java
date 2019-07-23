@@ -31,8 +31,9 @@ public class UserServiceImpl {
         this.converter = converter;
     }
 
-    public User get(String nickname) {
-        return repository.findByNickname(nickname);
+    public UiUser get(String nickname) {
+        User user = repository.findByNickname(nickname);
+        return converter.convert(user);
     }
 
     public UiUser get(long id) throws NotFoundException {

@@ -8,14 +8,12 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.security.VaadinSecurity;
-import ru.sberbank.homework.dragonblog.frontend.views.ProfileView;
+import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.model.Gender;
 import ru.sberbank.homework.dragonblog.model.Role;
 import ru.sberbank.homework.dragonblog.model.User;
 import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
 
-import java.util.Arrays;
 
 /**
  * Created by Mart
@@ -26,7 +24,6 @@ import java.util.Arrays;
 @Title("Register")
 public class RegisterUI extends UI {
 
-    private VaadinSecurity vaadinSecurity;
     private UserServiceImpl userService;
 
     @Autowired
@@ -209,8 +206,8 @@ public class RegisterUI extends UI {
                 alreadyUsedName.setStyleName(ValoTheme.LABEL_FAILURE);
                 nicknameValid = false;
             } else {
-                User nameIsUsed = userService.get(username);
-                if (nameIsUsed == null || !nameIsUsed.getNickname().equalsIgnoreCase(username)) {
+                UiUser usernameFromDb = userService.get(username);
+                if (usernameFromDb == null || !usernameFromDb.getNickname().equalsIgnoreCase(username)) {
                     alreadyUsedName.setValue("nickname свободен");
                     alreadyUsedName.setStyleName(ValoTheme.LABEL_SUCCESS);
                     nicknameValid = true;
