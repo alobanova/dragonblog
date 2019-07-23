@@ -123,7 +123,6 @@ public class RegisterUI extends UI {
                 Gender gender = sex.getValue().equals("мужской") ? Gender.MALE : Gender.FEMALE;
                 user.addRole(Role.USER);
                 user.setGender(gender);
-                System.out.println(user);
                 userService.saveNewUser(user);
                 UI.getCurrent().getPage().setLocation("/login");
             }
@@ -207,7 +206,7 @@ public class RegisterUI extends UI {
                 nicknameValid = false;
             } else {
                 UiUser usernameFromDb = userService.get(username);
-                if (usernameFromDb == null || !usernameFromDb.getNickname().equalsIgnoreCase(username)) {
+                if (usernameFromDb == null || !usernameFromDb.getNickname().equals(username)) {
                     alreadyUsedName.setValue("nickname свободен");
                     alreadyUsedName.setStyleName(ValoTheme.LABEL_SUCCESS);
                     nicknameValid = true;

@@ -68,8 +68,10 @@ public class UserServiceImpl {
     }
 
     public void saveNewUser(User user) {
+        String lowerNickname = user.getNickname().toLowerCase();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        user.setNickname(lowerNickname);
         repository.save(user);
     }
 
