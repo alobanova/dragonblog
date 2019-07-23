@@ -3,16 +3,13 @@ package ru.sberbank.homework.dragonblog.frontend.converter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import sun.util.resources.LocaleData;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.model.Gender;
 import ru.sberbank.homework.dragonblog.model.User;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 @Component
 public class UserConverter implements Converter<User, UiUser> {
@@ -69,5 +66,4 @@ public class UserConverter implements Converter<User, UiUser> {
     public static String convertDateToString(LocalDate date) {
         return date == null ? "" : formatter.format(date);
     }
-
 }

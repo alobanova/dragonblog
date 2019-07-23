@@ -2,21 +2,31 @@ package ru.sberbank.homework.dragonblog.frontend.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.navigator.SpringNavigator;
-import com.vaadin.ui.*;
-import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
-import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
-import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
-import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
-import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+
+import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
+import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
+import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
+import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
+import ru.sberbank.homework.dragonblog.security.SecurityUtils;
+import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
+import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
 
 @SpringView(name = ProfileView.NAME)
 public class ProfileView extends HorizontalLayout implements View {
@@ -34,8 +44,6 @@ public class ProfileView extends HorizontalLayout implements View {
     private final FormLayout postsLayout = new FormLayout();
 
     private UiUser user;
-
-    private Image avatar;
 
     private final UserServiceImpl service;
 
@@ -69,29 +77,27 @@ public class ProfileView extends HorizontalLayout implements View {
         addComponents(imageLayout, infoLayout);
         setExpandRatio(imageLayout, 6);
         setExpandRatio(infoLayout, 14);
+
+        user = service.get(SecurityUtils.getUser().getId());
     }
 
     private void initImagePanel() {
 
-        avatar = new Image("", new ThemeResource("../metro/img/avatar2.jpg"));
-        avatar.setPrimaryStyleName("avatar");
+        Image avatar = AvatarUtils.setAvatarResource(user);
 
         imagePanel.setPrimaryStyleName("image-panel");
         imagePanel.setContent(avatar);
 
         imageLayout.addComponent(imagePanel);
         imageLayout.setWidth(95, Unit.PERCENTAGE);
-
     }
 
     private void initInfoPanel() {
         info.setSizeFull();
         info.setMargin(false);
 
-        UiUser user = service.get(2);
-
-        FormLayout data = initData(user);
-        TextArea about = initAbout(user);
+        FormLayout data = initData();
+        TextArea about = initAbout();
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.addTab(data, "Данные");
@@ -104,32 +110,40 @@ public class ProfileView extends HorizontalLayout implements View {
         infoLayout.addComponent(info);
     }
 
-    private FormLayout initData(UiUser user) {
+    private FormLayout initData() {
         FormLayout data = new FormLayout();
         data.setSizeFull();
         data.setMargin(false);
         data.setSpacing(false);
         data.setStyleName("data-about");
 
-        String fio = String.format("%s %s %s", user.getSurname(), user.getFirstName(), user.getPatronymic());
+        String patronymic = user.getPatronymic() != null ? user.getPatronymic() : "";
+        String fio = String.format("%s %s %s", user.getSurname(), user.getFirstName(), patronymic);
 
         data.addComponent(new Label("<strong>ФИО: </strong>" + fio, ContentMode.HTML));
-        data.addComponent(new Label("<strong>День рождения: </strong>" + user.getBirthDate(), ContentMode.HTML));
+        if (!user.getBirthDate().equals("")) {
+            data.addComponent(
+                    new Label("<strong>День рождения: </strong>" + user.getBirthDate(), ContentMode.HTML));
+        }
         data.addComponent(new Label("<strong>Пол: </strong>" + user.getGender(), ContentMode.HTML));
-        data.addComponent(new Label("<strong>Город: </strong>" + user.getCity(), ContentMode.HTML));
+        if (!user.getCity().equals("")) {
+            data.addComponent(new Label("<strong>Город: </strong>" + user.getCity(), ContentMode.HTML));
+        }
 
         return data;
     }
 
-    private TextArea initAbout(UiUser user) {
+    private TextArea initAbout() {
         TextArea about = new TextArea();
         about.setSizeFull();
         about.setReadOnly(true);
         about.setStyleName("v-textarea");
         about.setMaxLength(1000);
-        about.setRows(8);
+        about.setRows(9);
         about.setStyleName("data-about");
-        about.setValue(user.getDescription());
+
+        String description = user.getDescription();
+        about.setValue(description);
 
         return about;
     }
@@ -140,8 +154,6 @@ public class ProfileView extends HorizontalLayout implements View {
 
         infoLayout.setExpandRatio(info, 3);
         infoLayout.setExpandRatio(postsLayout, 7);
-
-        user = service.get(2);
 
         displayCreatePostPanel();
 
@@ -173,7 +185,7 @@ public class ProfileView extends HorizontalLayout implements View {
 
         create.addClickListener((Button.ClickListener) event2 -> {
             String newDescription = textArea.getValue();
-            if(newDescription != null && !newDescription.isEmpty()) {
+            if (newDescription != null && !newDescription.isEmpty()) {
                 textArea.setValue("");
                 //Чтото тут с проверкой не так на автора.. вседа же тру будет;
                 UiPost post = UiPost.builder()
