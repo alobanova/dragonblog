@@ -22,8 +22,12 @@ import org.vaadin.spring.security.shared.VaadinSharedSecurity;
 @Title("Login")
 public class LoginUI extends UI {
 
+    private VaadinSharedSecurity vaadinSecurity;
+
     @Autowired
-    VaadinSharedSecurity vaadinSecurity;
+    public void setVaadinSecurity(VaadinSharedSecurity vaadinSecurity) {
+        this.vaadinSecurity = vaadinSecurity;
+    }
 
     private TextField userNameField;
     private PasswordField passwordField;
@@ -36,18 +40,18 @@ public class LoginUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
-        getPage().setTitle("Vaadin Security Demo Login");
+        getPage().setTitle("Страница авторизации");
 
         FormLayout loginForm = new FormLayout();
         loginForm.setSizeUndefined();
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
-        userNameField = new TextField("Username");
-        passwordField = new PasswordField("Password");
-        loginBtn = new Button("Login");
-        registerBtn = new Button("Register");
+        userNameField = new TextField("Логин");
+        passwordField = new PasswordField("Пароль");
+        loginBtn = new Button("Войти");
+        registerBtn = new Button("Регистрация");
         registerBtn.addClickListener(register());
-        rememberMe = new CheckBox("Remember me");
+        rememberMe = new CheckBox("запомнить меня");
 
         loginBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         loginBtn.setDisableOnClick(true);
@@ -66,7 +70,7 @@ public class LoginUI extends UI {
         loginLayout.setSizeUndefined();
 
         if (request.getParameter("logout") != null) {
-            loggedOutLabel = new Label("You have been logged out!");
+            loggedOutLabel = new Label("Вы вышли ненадолго, возвращайтесь снова!");
             loggedOutLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
             loggedOutLabel.setSizeUndefined();
             loginLayout.addComponent(loggedOutLabel);
@@ -96,7 +100,7 @@ public class LoginUI extends UI {
             userNameField.focus();
             userNameField.selectAll();
             passwordField.setValue("");
-            loginFailedLabel.setValue(String.format("Login failed: %s", ex.getMessage()));
+            loginFailedLabel.setValue(String.format("Не удалось войти %s", ex.getMessage()));
             loginFailedLabel.setVisible(true);
             if (loggedOutLabel != null) {
                 loggedOutLabel.setVisible(false);

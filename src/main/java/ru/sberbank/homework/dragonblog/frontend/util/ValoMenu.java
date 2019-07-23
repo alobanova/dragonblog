@@ -32,9 +32,12 @@ public final class ValoMenu extends CssLayout {
             setCaption(view.getCaption().substring(0, 1).toUpperCase()
                     + view.getCaption().substring(1));
 
-            addClickListener((ClickListener) event -> UI.getCurrent().getNavigator()
-                    .navigateTo(view.getViewName()));
+            if (view.equals(DashboardViewType.EXIT)) {
+                addClickListener(e -> UI.getCurrent().getPage().setLocation("/logout"));
+            } else {
+                addClickListener((ClickListener) event -> UI.getCurrent().getNavigator()
+                        .navigateTo(view.getViewName()));
+            }
         }
-
     }
 }

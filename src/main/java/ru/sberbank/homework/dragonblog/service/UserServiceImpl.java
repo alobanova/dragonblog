@@ -31,6 +31,10 @@ public class UserServiceImpl {
         this.converter = converter;
     }
 
+    public User get(String nickname) {
+        return repository.findByNickname(nickname);
+    }
+
     public UiUser get(long id) throws NotFoundException {
         User user = repository.findById(id);
 
@@ -60,6 +64,12 @@ public class UserServiceImpl {
         User user = converter.convertBack(uiUser);
 
         return update(id, user);
+    }
+
+    public void saveNewUser(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        repository.save(user);
     }
 
     public UiUser create(User user) {
