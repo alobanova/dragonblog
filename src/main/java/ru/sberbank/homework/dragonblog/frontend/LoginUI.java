@@ -50,11 +50,7 @@ public class LoginUI extends UI {
 
 
         if (request.getParameter("logout") != null) {
-            loggedOutLabel = new Label("Вы вышли ненадолго, возвращайтесь снова!");
-            loggedOutLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
-            loggedOutLabel.setSizeUndefined();
-            loginLayout.addComponent(loggedOutLabel);
-            loginLayout.setComponentAlignment(loggedOutLabel, Alignment.BOTTOM_CENTER);
+            loggedOutLabel.setVisible(true);
         }
 
 
@@ -81,6 +77,12 @@ public class LoginUI extends UI {
         horizontalLayout.addComponent(registerBtn);
         loginForm.addComponent(rememberMe);
         loginForm.addComponent(horizontalLayout);
+
+        loggedOutLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
+        loggedOutLabel.setSizeUndefined();
+        loginLayout.addComponent(loggedOutLabel);
+        loginLayout.setComponentAlignment(loggedOutLabel, Alignment.BOTTOM_CENTER);
+
         loginLayout.addComponent(loginForm);
         loginLayout.setComponentAlignment(loginForm, Alignment.TOP_CENTER);
     }
@@ -92,7 +94,9 @@ public class LoginUI extends UI {
         registerBtn = new Button("Регистрация");
         registerBtn.addClickListener(register());
         rememberMe = new CheckBox("запомнить меня");
+        loggedOutLabel = new Label("Вы вышли ненадолго, возвращайтесь снова!");
 
+        loggedOutLabel.setVisible(false);
         loginBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         loginBtn.setDisableOnClick(true);
         loginBtn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
