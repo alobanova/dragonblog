@@ -13,6 +13,7 @@ public class CommentPanel {
     private CommentServiceImpl commentService;
 
     private UiUser user;
+    private UiUser userSecurity;
     private UiComment comment;
     private VerticalLayout contentLayout;
 
@@ -25,17 +26,17 @@ public class CommentPanel {
     private Button save;
     private Button edit;
 
-    public CommentPanel(CommentServiceImpl commentService) {
+    public CommentPanel(CommentServiceImpl commentService, UiUser user) {
         this.commentService = commentService;
+        this.user = user;
     }
 
-    public VerticalLayout getPanelComment(UiComment comment, UiUser user, VerticalLayout contentLayout) {
+    public VerticalLayout getPanelComment(UiComment comment, UiUser author, VerticalLayout contentLayout) {
         this.comment = comment;
-        this.user = user;
+        this.userSecurity = author;
         this.contentLayout = contentLayout;
 
-        initTitle();
-        initTextLayout();
+        init();
 
         commentLayout.setSizeFull();
         commentLayout.setMargin(false);
@@ -44,30 +45,47 @@ public class CommentPanel {
         commentLayout.addComponent(title);
         commentLayout.addComponent(textLayout);
 
-        if (comment.getAuthor().getId().equals(user.getId())) {
-            initTextArea();
-            initButtonSave();
-            initButtonDelete();
-            initButtonEdit();
-
-            HorizontalLayout buttons = new HorizontalLayout();
-
-            buttons.setSizeFull();
-            buttons.setMargin(false);
-
-            buttons.addComponent(save);
-            buttons.addComponent(edit);
-            buttons.addComponent(delete);
-
-            buttons.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
-            buttons.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
-            buttons.setExpandRatio(edit, 1.0f);
-
+        if (comment.getAuthor().getId().equals(userSecurity.getId())
+                || user.getId().equals(userSecurity.getId())) {
             commentLayout.addComponent(textArea);
+            HorizontalLayout buttons = formButtonLayout();
             commentLayout.addComponent(buttons);
         }
 
         return commentLayout;
+    }
+
+    private void init() {
+        initTitle();
+        initTextLayout();
+
+        if (comment.getAuthor().getId().equals(userSecurity.getId())
+                || user.getId().equals(userSecurity.getId())) {
+            initTextArea();
+            initButtonSave();
+            initButtonDelete();
+            initButtonEdit();
+        }
+    }
+
+    private HorizontalLayout formButtonLayout() {
+        HorizontalLayout buttons = new HorizontalLayout();
+
+        buttons.setSizeFull();
+        buttons.setMargin(false);
+
+        buttons.addComponent(save);
+        buttons.addComponent(edit);
+        buttons.addComponent(delete);
+
+        if(!comment.getAuthor().getId().equals(userSecurity.getId())) {
+            edit.setVisible(false);
+        }
+
+        buttons.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
+        buttons.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
+        buttons.setExpandRatio(edit, 1.0f);
+        return buttons;
     }
 
     private void initTitle() {
