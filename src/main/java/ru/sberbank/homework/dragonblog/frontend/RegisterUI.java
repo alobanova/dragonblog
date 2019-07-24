@@ -118,7 +118,7 @@ public class RegisterUI extends UI {
         return event -> {
             if (isRegisterValid()){
                 User user = new User();
-                user.setNickname(usernameField.getValue().toLowerCase());
+                user.setNickname(usernameField.getValue());
                 user.setPassword(firstPasswordField.getValue());
                 user.setFirstName(firstnameField.getValue());
                 user.setSurname(surnameField.getValue());
