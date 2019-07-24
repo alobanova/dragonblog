@@ -42,6 +42,7 @@ public class ProfileView extends HorizontalLayout implements View {
     private final Panel imagePanel = new Panel();
     private final FormLayout info = new FormLayout();
     private final FormLayout postsLayout = new FormLayout();
+    private Label noPost = new Label("У пользователя еще нет постов");
 
     private UiUser user;
     private UiUser userSecurity;
@@ -168,8 +169,12 @@ public class ProfileView extends HorizontalLayout implements View {
         if(user.getId().equals(userSecurity.getId())) {
             displayCreatePostPanel();
         }
+        List<UiPost> posts = getListPosts();
 
-        for (UiPost post : getListPosts()) {
+        if(posts.isEmpty()) {
+            postsLayout.addComponent(noPost);
+        }
+        for (UiPost post : posts) {
             postsLayout.addComponent(formPanelPost(post));
         }
     }
@@ -211,6 +216,7 @@ public class ProfileView extends HorizontalLayout implements View {
 
                 if(post != null) {
                     postsLayout.addComponent(formPanelPost(post), 1);
+                    postsLayout.removeComponent(noPost);
                 }
             }
         });
