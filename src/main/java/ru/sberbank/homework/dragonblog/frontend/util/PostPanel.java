@@ -20,9 +20,11 @@ public class PostPanel {
     private CommentServiceImpl commentService;
 
     private UiUser user;
+    private UiUser userSecurity;
     private UiPost post;
     private FormLayout contentLayout;
     private VerticalLayout postContent = new VerticalLayout();
+    private HorizontalLayout buttonsLayout = new HorizontalLayout();
 
     private Panel panel;
     private Label text;
@@ -34,25 +36,28 @@ public class PostPanel {
     private Panel  panelCreateComment;
     private Button openComment;
 
-    public PostPanel(PostServiceImpl postService, CommentServiceImpl commentService) {
+    public PostPanel(PostServiceImpl postService, CommentServiceImpl commentService, UiUser user) {
         this.postService = postService;
         this.commentService = commentService;
+        this.user = user;
     }
 
-    public Panel getPanelPost(UiPost post, UiUser user, FormLayout contentLayout) {
+    public Panel getPanelPost(UiPost post, UiUser author, FormLayout contentLayout) {
         this.post = post;
-        this.user = user;
+        this.userSecurity = author;
         this.contentLayout = contentLayout;
 
         init();
 
         postContent.addComponent(text);
-        postContent.addComponent(textArea);
 
-        if(post.getAuthor().getId().equals(user.getId())) {
-            HorizontalLayout buttons = formButton();
-            postContent.addComponent(buttons);
+        initButtonLayout();
+
+        if(post.getAuthor().getId().equals(userSecurity.getId())) {
+            postContent.addComponent(textArea);
+            deployButton();
         }
+        postContent.addComponent(buttonsLayout);
 
         postContent.addComponent(openComment);
         postContent.setComponentAlignment(openComment, Alignment.MIDDLE_CENTER);
@@ -74,7 +79,7 @@ public class PostPanel {
         initCreateCommentPanel();
         initCreateCommentButton();
 
-        if(post.getAuthor().getId().equals(user.getId())) {
+        if(post.getAuthor().getId().equals(userSecurity.getId())) {
             initTextArea();
             initButtonDelete();
             initButtonEdit();
@@ -82,20 +87,20 @@ public class PostPanel {
         }
     }
 
-    private HorizontalLayout formButton() {
-        HorizontalLayout buttons = new HorizontalLayout();
-        buttons.setSizeFull();
-        buttons.setMargin(false);
-        buttons.setStyleName("layout-with-bottom-border");
+    private void initButtonLayout() {
+        buttonsLayout.setSizeFull();
+        buttonsLayout.setMargin(false);
+        buttonsLayout.setStyleName("layout-with-bottom-border");
+    }
 
-        buttons.addComponent(save);
-        buttons.addComponent(edit);
-        buttons.addComponent(delete);
+    private void deployButton() {
+        buttonsLayout.addComponent(save);
+        buttonsLayout.addComponent(edit);
+        buttonsLayout.addComponent(delete);
 
-        buttons.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
-        buttons.setExpandRatio(edit, 1.0f);
-        buttons.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
-        return buttons;
+        buttonsLayout.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
+        buttonsLayout.setExpandRatio(edit, 1.0f);
+        buttonsLayout.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
     }
 
     private void initPanel() {
@@ -163,7 +168,7 @@ public class PostPanel {
         String newDescription = textArea.getValue();
         if(newDescription != null && !newDescription.isEmpty()) {
             post.setDescription(newDescription);
-            postService.update(post, user.getId());
+            postService.update(post, userSecurity.getId());
             text.setValue(newDescription);
             text.setVisible(true);
             textArea.setVisible(false);
@@ -175,8 +180,8 @@ public class PostPanel {
     }
 
     private VerticalLayout formCommentPanel(UiComment comment) {
-        CommentPanel commentPanel = new CommentPanel(commentService);
-        return commentPanel.getPanelComment(comment, user, postContent);
+        CommentPanel commentPanel = new CommentPanel(commentService, user);
+        return commentPanel.getPanelComment(comment, userSecurity, postContent);
     }
 
     private void initOpenCommentButton(){
@@ -229,7 +234,7 @@ public class PostPanel {
                 textArea.setValue("");
                 //Чтото тут с проверкой не так на автора.. вседа же тру будет;
                 UiComment comment = UiComment.builder()
-                        .author(user)
+                        .author(userSecurity)
                         .post(post)
                         .description(newDescription)
                         .date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy", Locale.getDefault())))

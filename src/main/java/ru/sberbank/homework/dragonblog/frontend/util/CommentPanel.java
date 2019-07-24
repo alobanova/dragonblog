@@ -1,18 +1,24 @@
 package ru.sberbank.homework.dragonblog.frontend.util;
 
+import com.vaadin.event.ContextClickEvent;
+import com.vaadin.event.LayoutEvents;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ClientConnector;
 import com.vaadin.server.Sizeable;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiComment;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
+import ru.sberbank.homework.dragonblog.frontend.views.ProfileView;
 import ru.sberbank.homework.dragonblog.service.CommentServiceImpl;
 
 public class CommentPanel {
     private CommentServiceImpl commentService;
 
     private UiUser user;
+    private UiUser userSecurity;
     private UiComment comment;
     private VerticalLayout contentLayout;
 
@@ -25,17 +31,17 @@ public class CommentPanel {
     private Button save;
     private Button edit;
 
-    public CommentPanel(CommentServiceImpl commentService) {
+    public CommentPanel(CommentServiceImpl commentService, UiUser user) {
         this.commentService = commentService;
+        this.user = user;
     }
 
-    public VerticalLayout getPanelComment(UiComment comment, UiUser user, VerticalLayout contentLayout) {
+    public VerticalLayout getPanelComment(UiComment comment, UiUser author, VerticalLayout contentLayout) {
         this.comment = comment;
-        this.user = user;
+        this.userSecurity = author;
         this.contentLayout = contentLayout;
 
-        initTitle();
-        initTextLayout();
+        init();
 
         commentLayout.setSizeFull();
         commentLayout.setMargin(false);
@@ -44,30 +50,47 @@ public class CommentPanel {
         commentLayout.addComponent(title);
         commentLayout.addComponent(textLayout);
 
-        if (comment.getAuthor().getId().equals(user.getId())) {
-            initTextArea();
-            initButtonSave();
-            initButtonDelete();
-            initButtonEdit();
-
-            HorizontalLayout buttons = new HorizontalLayout();
-
-            buttons.setSizeFull();
-            buttons.setMargin(false);
-
-            buttons.addComponent(save);
-            buttons.addComponent(edit);
-            buttons.addComponent(delete);
-
-            buttons.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
-            buttons.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
-            buttons.setExpandRatio(edit, 1.0f);
-
+        if (comment.getAuthor().getId().equals(userSecurity.getId())
+                || user.getId().equals(userSecurity.getId())) {
             commentLayout.addComponent(textArea);
+            HorizontalLayout buttons = formButtonLayout();
             commentLayout.addComponent(buttons);
         }
 
         return commentLayout;
+    }
+
+    private void init() {
+        initTitle();
+        initTextLayout();
+
+        if (comment.getAuthor().getId().equals(userSecurity.getId())
+                || user.getId().equals(userSecurity.getId())) {
+            initTextArea();
+            initButtonSave();
+            initButtonDelete();
+            initButtonEdit();
+        }
+    }
+
+    private HorizontalLayout formButtonLayout() {
+        HorizontalLayout buttons = new HorizontalLayout();
+
+        buttons.setSizeFull();
+        buttons.setMargin(false);
+
+        buttons.addComponent(save);
+        buttons.addComponent(edit);
+        buttons.addComponent(delete);
+
+        if(!comment.getAuthor().getId().equals(userSecurity.getId())) {
+            edit.setVisible(false);
+        }
+
+        buttons.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
+        buttons.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
+        buttons.setExpandRatio(edit, 1.0f);
+        return buttons;
     }
 
     private void initTitle() {
@@ -81,11 +104,16 @@ public class CommentPanel {
         avatar.setStyleName("image-panel");
 
         String name = author.getFirstName() + " " + author.getSurname() + " " + author.getNickname();
-        Label nameComment = new Label(name);
-        nameComment.setStyleName("comment-name-font");
+        Button nameComment = new Button(name);
+        nameComment.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+
+        nameComment.addClickListener((Button.ClickListener) event -> {
+            VaadinSession.getCurrent().setAttribute("user_id", author.getId());
+            UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME);
+        });
 
         Label date = new Label(comment.getDate());
-        date.setStyleName("data-about");
+        date.setStyleName("comment-date-font");
 
         VerticalLayout info = new VerticalLayout();
         info.setSpacing(false);
