@@ -1,12 +1,17 @@
 package ru.sberbank.homework.dragonblog.frontend.util;
 
+import com.vaadin.event.ContextClickEvent;
+import com.vaadin.event.LayoutEvents;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ClientConnector;
 import com.vaadin.server.Sizeable;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiComment;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
+import ru.sberbank.homework.dragonblog.frontend.views.ProfileView;
 import ru.sberbank.homework.dragonblog.service.CommentServiceImpl;
 
 public class CommentPanel {
@@ -99,11 +104,16 @@ public class CommentPanel {
         avatar.setStyleName("image-panel");
 
         String name = author.getFirstName() + " " + author.getSurname() + " " + author.getNickname();
-        Label nameComment = new Label(name);
-        nameComment.setStyleName("comment-name-font");
+        Button nameComment = new Button(name);
+        nameComment.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+
+        nameComment.addClickListener((Button.ClickListener) event -> {
+            VaadinSession.getCurrent().setAttribute("user_id", author.getId());
+            UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME);
+        });
 
         Label date = new Label(comment.getDate());
-        date.setStyleName("data-about");
+        date.setStyleName("comment-date-font");
 
         VerticalLayout info = new VerticalLayout();
         info.setSpacing(false);
