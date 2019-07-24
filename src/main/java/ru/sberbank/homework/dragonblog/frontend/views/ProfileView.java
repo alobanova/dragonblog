@@ -25,6 +25,7 @@ import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
 import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
+import ru.sberbank.homework.dragonblog.service.CommentServiceImpl;
 import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
 import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
 
@@ -33,6 +34,7 @@ public class ProfileView extends HorizontalLayout implements View {
     public static final String NAME = "profile";
 
     private PostServiceImpl postService;
+    private CommentServiceImpl commentService;
 
     private final VerticalLayout imageLayout = new VerticalLayout();
     private final VerticalLayout infoLayout = new VerticalLayout();
@@ -46,9 +48,11 @@ public class ProfileView extends HorizontalLayout implements View {
     private final UserServiceImpl service;
 
     public ProfileView(UserServiceImpl service,
-                       PostServiceImpl postService) {
+                       PostServiceImpl postService,
+                       CommentServiceImpl commentService) {
         this.service = service;
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @Override
@@ -171,7 +175,7 @@ public class ProfileView extends HorizontalLayout implements View {
     }
 
     private Panel formPanelPost(UiPost post) {
-        PostPanel postPanel = new PostPanel(postService);
+        PostPanel postPanel = new PostPanel(postService, commentService);
         return postPanel.getPanelPost(post, user, postsLayout);
     }
 

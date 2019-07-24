@@ -32,12 +32,12 @@ public class CommentServiceImpl {
         repository.update(id, description);
     }
 
-    public void delete(long id, long userId) throws NotFoundException {
-        repository.deleteByIdAndAuthorId(id, userId);
+    public void delete(long id) throws NotFoundException {
+        repository.deleteById(id);
     }
 
-    public UiComment create(Comment comment) {
-        Comment saveComment = repository.save(comment);
+    public UiComment create(UiComment comment) {
+        Comment saveComment = repository.save(converter.convertBack(comment));
 
         if (saveComment != null) {
             return converter.convert(saveComment);
@@ -53,6 +53,15 @@ public class CommentServiceImpl {
         allByPostId.ifPresent(comments -> uiComments.addAll(converter.convert(comments)));
 
         return uiComments;
+    }
+
+    public UiComment getFirstByDate(long postId) {
+        Comment comment = repository.findFirstByPostIdOrderByDateDesc(postId);
+
+        if(comment != null) {
+            return converter.convert(comment);
+        }
+        return null;
     }
 
     public UiComment getById(long id) {
