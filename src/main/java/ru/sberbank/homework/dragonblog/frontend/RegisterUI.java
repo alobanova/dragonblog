@@ -42,11 +42,12 @@ public class RegisterUI extends UI {
     private PasswordField firstPasswordField;
     private PasswordField secondPasswordField;
 
-    private Label textBeforePassword;
     private Label alreadyUsedName;
     private Label passwordStrength;
     private Label mismatchPassword;
     private Label nameValidLabel;
+    private Label nickNameRuleInfo;
+    private Label nickNameRuleInfo2;
 
     private Button register;
 
@@ -72,9 +73,8 @@ public class RegisterUI extends UI {
 
     private void initFields() {
         usernameField  = new TextField("Nickname");
-        textBeforePassword  = new Label("Введите пароль дважды");
-        firstPasswordField = new PasswordField();
-        secondPasswordField = new PasswordField();
+        firstPasswordField = new PasswordField("Введите пароль");
+        secondPasswordField = new PasswordField("Повторите пароль");
         register = new Button("Регистрация");
         alreadyUsedName = new Label();
         passwordStrength = new Label();
@@ -82,6 +82,8 @@ public class RegisterUI extends UI {
         firstnameField = new TextField("Имя");
         surnameField = new TextField("Фамилия");
         nameValidLabel = new Label("2-20 eng/рус символов");
+        nickNameRuleInfo = new Label("nickname будет сохранен в нижнем регистре,");
+        nickNameRuleInfo2 = new Label("доступны только eng/рус буквы и смиволы '-' и '@'");
 
         sex = new RadioButtonGroup<String>("Пол");
 
@@ -197,21 +199,21 @@ public class RegisterUI extends UI {
 
     private void setNickNameEvents() {
         usernameField.addValueChangeListener(e -> {
-           String username = usernameField.getValue();
+           String username = usernameField.getValue().toLowerCase();
            alreadyUsedName.addStyleName(ValoTheme.LABEL_FAILURE);
-            if (!username.matches("^[@a-zA-Zа-яА-Я0-9-]{3,20}$")) {
-                alreadyUsedName.setValue("3-20 буквы, цифры и символы @ и -");
+            if (!username.matches("(?=.*[a-zа-яA-ZА-Я])[@a-zA-Zа-яА-Я0-9-]{3,20}$")) {
+                alreadyUsedName.setValue("не менее 3 и хотя бы 1 буква");
                 alreadyUsedName.setVisible(true);
                 alreadyUsedName.setStyleName(ValoTheme.LABEL_FAILURE);
                 nicknameValid = false;
             } else {
-                UiUser usernameFromDb = userService.get(username);
+                UiUser usernameFromDb = userService.findByNickname(username);
                 if (usernameFromDb == null || !usernameFromDb.getNickname().equals(username)) {
                     alreadyUsedName.setValue("nickname свободен");
                     alreadyUsedName.setStyleName(ValoTheme.LABEL_SUCCESS);
                     nicknameValid = true;
                 } else {
-                    alreadyUsedName.setValue("пользователь с таким nickname уже существует");
+                    alreadyUsedName.setValue("nickname занят");
                     nicknameValid = false;
                 }
             }
@@ -227,16 +229,15 @@ public class RegisterUI extends UI {
         grid.setSpacing(true);
         grid.setSizeUndefined();
         grid.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
-        grid.setWidth(1000, Unit.PIXELS);
-        grid.setHeight(700, Unit.PIXELS);
 
         grid.addComponent(usernameField, 1, 0);
-        grid.addComponent(textBeforePassword, 1, 2);
         grid.addComponent(firstPasswordField, 1, 3);
         grid.addComponent(secondPasswordField, 1, 4);
         grid.addComponent(register, 1, 5);
 
         grid.addComponent(alreadyUsedName, 0, 0);
+        grid.addComponent(nickNameRuleInfo, 0, 1);
+        grid.addComponent(nickNameRuleInfo2, 0, 2);
         grid.addComponent(passwordStrength, 0, 3);
         grid.addComponent(mismatchPassword, 0, 4);
 

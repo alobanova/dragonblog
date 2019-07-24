@@ -44,6 +44,7 @@ public class ProfileView extends HorizontalLayout implements View {
     private final FormLayout postsLayout = new FormLayout();
 
     private UiUser user;
+    private UiUser userSecurity;
 
     private final UserServiceImpl service;
 
@@ -82,8 +83,9 @@ public class ProfileView extends HorizontalLayout implements View {
 
     private void initCurrentUser() {
         Object user_id = VaadinSession.getCurrent().getAttribute("user_id");
+        userSecurity = service.get(SecurityUtils.getUser().getId());
         if (user_id == null) {
-            user = service.get(SecurityUtils.getUser().getId());
+            user = userSecurity;
         } else {
             user = service.get((long) user_id);
         }
@@ -163,7 +165,9 @@ public class ProfileView extends HorizontalLayout implements View {
         infoLayout.setExpandRatio(info, 3);
         infoLayout.setExpandRatio(postsLayout, 7);
 
-        displayCreatePostPanel();
+        if(user.getId().equals(userSecurity.getId())) {
+            displayCreatePostPanel();
+        }
 
         for (UiPost post : getListPosts()) {
             postsLayout.addComponent(formPanelPost(post));
@@ -175,8 +179,8 @@ public class ProfileView extends HorizontalLayout implements View {
     }
 
     private Panel formPanelPost(UiPost post) {
-        PostPanel postPanel = new PostPanel(postService, commentService);
-        return postPanel.getPanelPost(post, user, postsLayout);
+        PostPanel postPanel = new PostPanel(postService, commentService, user);
+        return postPanel.getPanelPost(post, userSecurity, postsLayout);
     }
 
     private void displayCreatePostPanel() {
@@ -195,16 +199,19 @@ public class ProfileView extends HorizontalLayout implements View {
             String newDescription = textArea.getValue();
             if (newDescription != null && !newDescription.isEmpty()) {
                 textArea.setValue("");
-                //Чтото тут с проверкой не так на автора.. вседа же тру будет;
+
                 UiPost post = UiPost.builder()
-                        .author(user)
+                        .author(userSecurity)
                         .description(newDescription)
                         .postDateTime(LocalDateTime.now().format(DateTimeFormatter
                                 .ofPattern("HH:mm:ss dd.MM.yyyy", Locale.getDefault())))
                         .build();
 
                 post = postService.create(post, user.getId());
-                postsLayout.addComponent(formPanelPost(post), 1);
+
+                if(post != null) {
+                    postsLayout.addComponent(formPanelPost(post), 1);
+                }
             }
         });
 
