@@ -31,9 +31,9 @@ public class RegisterUI extends UI {
         this.userService = userService;
     }
 
-    private VerticalLayout rootLayout;
+    private final VerticalLayout rootLayout = new VerticalLayout();
 
-    private GridLayout grid;
+    private final GridLayout grid = new GridLayout(3, 6);
 
     private TextField usernameField;
     private TextField firstnameField;
@@ -221,11 +221,8 @@ public class RegisterUI extends UI {
     }
 
     private void initLayouts() {
-        rootLayout = new VerticalLayout();
         rootLayout.setSizeFull();
 
-
-        grid = new GridLayout(3, 6);
         grid.setSpacing(true);
         grid.setSizeUndefined();
         grid.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
@@ -57,6 +59,20 @@ public class UserConverter implements Converter<User, UiUser> {
         user.setDescription(description);
 
         return user;
+    }
+
+    public List<UiUser> convert(List<User> users) {
+        List<UiUser> uiUsers = new ArrayList<>();
+
+        if (users == null || users.isEmpty()) {
+            return uiUsers;
+        }
+
+        for (User user : users) {
+            uiUsers.add(convert(user));
+        }
+
+        return uiUsers;
     }
 
     public static LocalDate convertStringToDate(String date) {

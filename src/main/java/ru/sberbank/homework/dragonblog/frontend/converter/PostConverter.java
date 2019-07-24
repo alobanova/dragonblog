@@ -36,7 +36,7 @@ public class PostConverter implements Converter<Post, UiPost> {
 
         List<UiPost> uiPosts = new ArrayList<>();
 
-        if(posts.isEmpty()) {
+        if(posts == null || posts.isEmpty()) {
             return uiPosts;
         }
 
@@ -55,5 +55,4 @@ public class PostConverter implements Converter<Post, UiPost> {
         post.setPostDateTime(LocalDateTime.parse(uiPost.getPostDateTime(), formatter));
         return post;
     }
-
 }

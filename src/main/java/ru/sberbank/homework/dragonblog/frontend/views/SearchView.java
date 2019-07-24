@@ -6,19 +6,16 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
 
+import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
+import ru.sberbank.homework.dragonblog.security.SecurityUtils;
+import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
 import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
 
 @SpringView(name = SearchView.NAME)
@@ -29,12 +26,15 @@ public class SearchView extends VerticalLayout implements View {
 
     private final TextField searchField = new TextField();
     private final Button searchBtn = new Button(VaadinIcons.SEARCH, this::search);
+    private final Button favouriteBtn = new Button(VaadinIcons.STAR, this::favourite);
     private final Panel userPanel = new Panel();
 
-    private final UserServiceImpl service;
+    private final UserServiceImpl userService;
+    private final PostServiceImpl postService;
 
-    public SearchView(final UserServiceImpl service) {
-        this.service = service;
+    public SearchView(final UserServiceImpl userService, final PostServiceImpl postService) {
+        this.userService = userService;
+        this.postService = postService;
     }
 
     @Override
@@ -42,13 +42,14 @@ public class SearchView extends VerticalLayout implements View {
         setSizeFull();
         initSearchLayout();
         initUserLayout();
+        initFavouriteView();
     }
 
     private void initSearchLayout() {
         searchField.setWidth(100, Unit.PERCENTAGE);
         searchField.setMaxLength(30);
 
-        HorizontalLayout searchLayout = new HorizontalLayout(searchField, searchBtn);
+        HorizontalLayout searchLayout = new HorizontalLayout(searchField, searchBtn, favouriteBtn);
         searchLayout.setSizeFull();
         searchLayout.setMargin(new MarginInfo(false, false, true, false));
 
@@ -74,8 +75,12 @@ public class SearchView extends VerticalLayout implements View {
             return;
         }
 
-        List<UiUser> users = service.findByPartOfNickname(value);
+        List<UiUser> users = userService.findByPartOfNickname(value);
 
+        fillUsers(users);
+    }
+
+    private void fillUsers(List<UiUser> users) {
         for (UiUser findUser : users) {
             Panel userPanel = new Panel();
             userPanel.setWidth(100, Unit.PERCENTAGE);
@@ -96,6 +101,20 @@ public class SearchView extends VerticalLayout implements View {
             userPanel.setContent(hl);
             usersLayout.addComponent(userPanel);
         }
+    }
+
+    private void initFavouriteView () {
+        long userId = SecurityUtils.getUser().getId();
+        List<UiUser> favouriteUsers = userService.findFavouriteUsers(userId);
+
+        if (!favouriteUsers.isEmpty()) {
+            fillUsers(favouriteUsers);
+        }
+    }
+
+    private void favourite(Button.ClickEvent event) {
+        usersLayout.removeAllComponents();
+        initFavouriteView();
     }
 
     public final class UserButton extends Button {

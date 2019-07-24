@@ -29,6 +29,9 @@ public class LoginUI extends UI {
         this.vaadinSecurity = vaadinSecurity;
     }
 
+    private final VerticalLayout loginLayout = new VerticalLayout();
+    private final VerticalLayout rootLayout = new VerticalLayout();
+
     private TextField userNameField;
     private PasswordField passwordField;
     private Button loginBtn;
@@ -41,11 +44,48 @@ public class LoginUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         getPage().setTitle("Страница авторизации");
+        initLayout();
+        initFields();
+        initLoginForm();
 
+
+        if (request.getParameter("logout") != null) {
+            loggedOutLabel = new Label("Вы вышли ненадолго, возвращайтесь снова!");
+            loggedOutLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
+            loggedOutLabel.setSizeUndefined();
+            loginLayout.addComponent(loggedOutLabel);
+            loginLayout.setComponentAlignment(loggedOutLabel, Alignment.BOTTOM_CENTER);
+        }
+
+
+        setContent(rootLayout);
+        setSizeFull();
+    }
+
+    private void initLayout() {
+        loginLayout.setSpacing(true);
+        loginLayout.setSizeUndefined();
+        rootLayout.addComponent(loginLayout);
+        rootLayout.setSizeFull();
+        rootLayout.setComponentAlignment(loginLayout, Alignment.MIDDLE_CENTER);
+    }
+
+    private void initLoginForm() {
         FormLayout loginForm = new FormLayout();
         loginForm.setSizeUndefined();
         HorizontalLayout horizontalLayout = new HorizontalLayout();
 
+        loginForm.addComponent(userNameField);
+        loginForm.addComponent(passwordField);
+        horizontalLayout.addComponent(loginBtn);
+        horizontalLayout.addComponent(registerBtn);
+        loginForm.addComponent(rememberMe);
+        loginForm.addComponent(horizontalLayout);
+        loginLayout.addComponent(loginForm);
+        loginLayout.setComponentAlignment(loginForm, Alignment.TOP_CENTER);
+    }
+
+    private void initFields() {
         userNameField = new TextField("Логин");
         passwordField = new PasswordField("Пароль");
         loginBtn = new Button("Войти");
@@ -58,44 +98,16 @@ public class LoginUI extends UI {
         loginBtn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         loginBtn.addClickListener(e -> login());
 
-        loginForm.addComponent(userNameField);
-        loginForm.addComponent(passwordField);
-        horizontalLayout.addComponent(loginBtn);
-        horizontalLayout.addComponent(registerBtn);
-        loginForm.addComponent(rememberMe);
-        loginForm.addComponent(horizontalLayout);
-
-        VerticalLayout loginLayout = new VerticalLayout();
-        loginLayout.setSpacing(true);
-        loginLayout.setSizeUndefined();
-
-        if (request.getParameter("logout") != null) {
-            loggedOutLabel = new Label("Вы вышли ненадолго, возвращайтесь снова!");
-            loggedOutLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
-            loggedOutLabel.setSizeUndefined();
-            loginLayout.addComponent(loggedOutLabel);
-            loginLayout.setComponentAlignment(loggedOutLabel, Alignment.BOTTOM_CENTER);
-        }
-
         loginLayout.addComponent(loginFailedLabel = new Label());
         loginLayout.setComponentAlignment(loginFailedLabel, Alignment.BOTTOM_CENTER);
         loginFailedLabel.setSizeUndefined();
         loginFailedLabel.addStyleName(ValoTheme.LABEL_FAILURE);
         loginFailedLabel.setVisible(false);
-
-        loginLayout.addComponent(loginForm);
-        loginLayout.setComponentAlignment(loginForm, Alignment.TOP_CENTER);
-
-        VerticalLayout rootLayout = new VerticalLayout(loginLayout);
-        rootLayout.setSizeFull();
-        rootLayout.setComponentAlignment(loginLayout, Alignment.MIDDLE_CENTER);
-        setContent(rootLayout);
-        setSizeFull();
     }
 
     private void login() {
         try {
-            vaadinSecurity.login(userNameField.getValue(), passwordField.getValue(), rememberMe.getValue());
+            vaadinSecurity.login(userNameField.getValue().toLowerCase(), passwordField.getValue(), rememberMe.getValue());
         } catch (AuthenticationException ex) {
             userNameField.focus();
             userNameField.selectAll();

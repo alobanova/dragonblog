@@ -97,6 +97,10 @@ public class UserServiceImpl {
         repository.save(user);
     }
 
+    public List<UiUser> findFavouriteUsers(long id) {
+        List<User> users = repository.findFavouriteUsers(id);
+        return converter.convert(users);
+    }
     public UiUser create(User user) {
         return null;
     }
