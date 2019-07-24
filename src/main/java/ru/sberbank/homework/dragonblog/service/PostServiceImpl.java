@@ -44,8 +44,8 @@ public class PostServiceImpl {
         return null;
     }
 
-    public void delete(long id, long userId) throws NotFoundException {
-        repository.deleteByIdAndAuthorId(id, userId);
+    public void delete(long id) throws NotFoundException {
+        repository.deleteById(id);
     }
 
     public UiPost update(UiPost post, long userId) throws NotFoundException {

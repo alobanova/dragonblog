@@ -8,9 +8,11 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,6 +52,8 @@ public class EditView extends VerticalLayout implements View {
     private File newAvatar;
     private Image avatar;
 
+    private final Label FAIL_LABEL = new Label("Заполните все обязательные поля");
+
     public EditView(SpringNavigator navigator,
                     final UserServiceImpl service) {
         this.navigator = navigator;
@@ -75,13 +79,15 @@ public class EditView extends VerticalLayout implements View {
         splitPanel.setLocked(true);
         splitPanel.setStyleName("data-about");
 
+        FAIL_LABEL.setStyleName(ValoTheme.LABEL_FAILURE);
+
         addComponent(splitPanel);
     }
 
     private void initImagePanel() {
         imageLayout.setSizeFull();
 
-        avatar = AvatarUtils.setAvatarResource(user);
+        avatar = AvatarUtils.imageFromByteArray(user.getAvatar());
 
         imagePanel.setPrimaryStyleName("image-panel");
         imagePanel.setContent(avatar);
@@ -122,8 +128,10 @@ public class EditView extends VerticalLayout implements View {
         String surname = fields.getSurname().getValue();
 
         if (firstName.equals("") || surname.equals("")) {
+            infoLayout.addComponent(FAIL_LABEL);
             return;
         }
+
 
         String patronymic = fields.getPatronymic().getValue();
         String gender = fields.getGender().getValue();
