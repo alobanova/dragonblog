@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import ru.sberbank.homework.dragonblog.model.Gender;
 import ru.sberbank.homework.dragonblog.model.User;
@@ -17,6 +18,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findById(long id);
 
     User findByNickname(String nickname);
+
+    @Query(value = "select * from USERS WHERE nickname LIKE ?1", nativeQuery = true)
+    List<User> findByNicknameRegex(String regex);
 
     @Modifying
     @Query("update User u set u.firstName = ?2, u.surname = ?3, u.patronymic = ?4,"

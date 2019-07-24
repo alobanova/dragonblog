@@ -2,9 +2,9 @@ package ru.sberbank.homework.dragonblog.frontend.views;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.navigator.SpringNavigator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -32,8 +32,6 @@ import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
 public class ProfileView extends HorizontalLayout implements View {
     public static final String NAME = "profile";
 
-    private SpringNavigator navigator;
-
     private PostServiceImpl postService;
 
     private final VerticalLayout imageLayout = new VerticalLayout();
@@ -47,10 +45,8 @@ public class ProfileView extends HorizontalLayout implements View {
 
     private final UserServiceImpl service;
 
-    public ProfileView(SpringNavigator navigator,
-                       UserServiceImpl service,
+    public ProfileView(UserServiceImpl service,
                        PostServiceImpl postService) {
-        this.navigator = navigator;
         this.service = service;
         this.postService = postService;
     }
@@ -58,6 +54,7 @@ public class ProfileView extends HorizontalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         initRoot();
+        initCurrentUser();
         initImagePanel();
         initInfoPanel();
         initPostsPanel();
@@ -77,13 +74,20 @@ public class ProfileView extends HorizontalLayout implements View {
         addComponents(imageLayout, infoLayout);
         setExpandRatio(imageLayout, 6);
         setExpandRatio(infoLayout, 14);
+    }
 
-        user = service.get(SecurityUtils.getUser().getId());
+    private void initCurrentUser() {
+        Object user_id = VaadinSession.getCurrent().getAttribute("user_id");
+        if (user_id == null) {
+            user = service.get(SecurityUtils.getUser().getId());
+        } else {
+            user = service.get((long) user_id);
+        }
     }
 
     private void initImagePanel() {
 
-        Image avatar = AvatarUtils.setAvatarResource(user);
+        Image avatar = AvatarUtils.imageFromByteArray(user.getAvatar());
 
         imagePanel.setPrimaryStyleName("image-panel");
         imagePanel.setContent(avatar);

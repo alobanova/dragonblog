@@ -5,7 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
@@ -49,6 +51,34 @@ public class UserServiceImpl {
 
     public boolean delete(long id) throws NotFoundException {
         return false;
+    }
+
+    public UiUser findByNickname(String nickname) {
+        if (nickname == null) {
+            return null;
+        }
+
+        User user = repository.findByNickname(nickname);
+        if (user != null) {
+            return converter.convert(user);
+        }
+
+        return null;
+    }
+
+    public List<UiUser> findByPartOfNickname(String value) {
+
+        if (value == null) {
+            return Collections.emptyList();
+        }
+        List<UiUser> uiUsers = Collections.emptyList();
+
+        List<User> users = repository.findByNicknameRegex("%" + value.toLowerCase() + "%");
+        if (users != null) {
+            uiUsers = users.stream().map(converter::convert).collect(Collectors.toList());
+        }
+
+        return uiUsers;
     }
 
     public UiUser update(long id, User user) throws NotFoundException {

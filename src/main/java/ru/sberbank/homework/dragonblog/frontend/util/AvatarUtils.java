@@ -6,17 +6,15 @@ import com.vaadin.ui.Image;
 
 import java.io.ByteArrayInputStream;
 
-import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
-
 public class AvatarUtils {
-    public static Image setAvatarResource(UiUser user) {
+
+    public static Image imageFromByteArray(byte[] array) {
         Image avatar = new Image();
         avatar.setPrimaryStyleName("avatar");
 
-        byte[] avatarBytes = user.getAvatar();
-        if (avatarBytes != null) {
+        if (array != null) {
             StreamResource.StreamSource streamSource =
-                    (StreamResource.StreamSource) () -> new ByteArrayInputStream(avatarBytes);
+                    (StreamResource.StreamSource) () -> new ByteArrayInputStream(array);
 
             StreamResource imageResource = new StreamResource(streamSource, "");
             avatar.setSource(imageResource);
