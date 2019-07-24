@@ -11,6 +11,7 @@ import java.util.List;
 import ru.sberbank.homework.dragonblog.model.Gender;
 import ru.sberbank.homework.dragonblog.model.User;
 
+
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 
