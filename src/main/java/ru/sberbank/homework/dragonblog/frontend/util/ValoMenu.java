@@ -6,7 +6,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 
-
 public final class ValoMenu extends CssLayout {
 
     public ValoMenu() {
@@ -40,9 +39,8 @@ public final class ValoMenu extends CssLayout {
                     VaadinSession.getCurrent().setAttribute("user_id", null);
                     UI.getCurrent().getNavigator()
                             .navigateTo(view.getViewName());
-                } );
+                });
             }
-
         }
     }
 }
