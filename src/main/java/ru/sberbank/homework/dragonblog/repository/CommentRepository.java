@@ -17,6 +17,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<List<Comment>> findAllByPostIdOrderByDate(long id);
 
+    Comment findFirstByPostIdOrderByDateDesc(long id);
+
     @Modifying
     @Query("update Comment c set c.description = ?2 where c.id = ?1")
     void update(long id, String description);
