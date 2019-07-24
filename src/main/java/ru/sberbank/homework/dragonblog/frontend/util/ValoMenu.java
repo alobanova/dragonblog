@@ -1,5 +1,6 @@
 package ru.sberbank.homework.dragonblog.frontend.util;
 
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
@@ -32,8 +33,11 @@ public final class ValoMenu extends CssLayout {
             setCaption(view.getCaption().substring(0, 1).toUpperCase()
                     + view.getCaption().substring(1));
 
-            addClickListener((ClickListener) event -> UI.getCurrent().getNavigator()
-                    .navigateTo(view.getViewName()));
+            addClickListener((ClickListener) event -> {
+                VaadinSession.getCurrent().setAttribute("user_id", null);
+                UI.getCurrent().getNavigator()
+                        .navigateTo(view.getViewName());
+            } );
         }
 
     }
