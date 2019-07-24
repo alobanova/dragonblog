@@ -33,8 +33,8 @@ public class UserServiceImpl {
         this.converter = converter;
     }
 
-    public UiUser get(String nickname) {
-        User user = repository.findByNickname(nickname);
+    public UiUser findByNickname(String nickname) {
+        User user = nickname != null ? repository.findByNickname(nickname) : null;
         return user != null ? converter.convert(user) : null;
     }
 
@@ -51,19 +51,6 @@ public class UserServiceImpl {
 
     public boolean delete(long id) throws NotFoundException {
         return false;
-    }
-
-    public UiUser findByNickname(String nickname) {
-        if (nickname == null) {
-            return null;
-        }
-
-        User user = repository.findByNickname(nickname);
-        if (user != null) {
-            return converter.convert(user);
-        }
-
-        return null;
     }
 
     public List<UiUser> findByPartOfNickname(String value) {

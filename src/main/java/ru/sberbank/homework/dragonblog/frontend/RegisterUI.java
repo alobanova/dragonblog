@@ -118,7 +118,7 @@ public class RegisterUI extends UI {
         return event -> {
             if (isRegisterValid()){
                 User user = new User();
-                user.setNickname(usernameField.getValue());
+                user.setNickname(usernameField.getValue().toLowerCase());
                 user.setPassword(firstPasswordField.getValue());
                 user.setFirstName(firstnameField.getValue());
                 user.setSurname(surnameField.getValue());
@@ -199,7 +199,7 @@ public class RegisterUI extends UI {
 
     private void setNickNameEvents() {
         usernameField.addValueChangeListener(e -> {
-           String username = usernameField.getValue();
+           String username = usernameField.getValue().toLowerCase();
            alreadyUsedName.addStyleName(ValoTheme.LABEL_FAILURE);
             if (!username.matches("(?=.*[a-zа-яA-ZА-Я])[@a-zA-Zа-яА-Я0-9-]{3,20}$")) {
                 alreadyUsedName.setValue("не менее 3 и хотя бы 1 буква");
@@ -207,7 +207,7 @@ public class RegisterUI extends UI {
                 alreadyUsedName.setStyleName(ValoTheme.LABEL_FAILURE);
                 nicknameValid = false;
             } else {
-                UiUser usernameFromDb = userService.get(username);
+                UiUser usernameFromDb = userService.findByNickname(username);
                 if (usernameFromDb == null || !usernameFromDb.getNickname().equals(username)) {
                     alreadyUsedName.setValue("nickname свободен");
                     alreadyUsedName.setStyleName(ValoTheme.LABEL_SUCCESS);
@@ -229,7 +229,6 @@ public class RegisterUI extends UI {
         grid.setSpacing(true);
         grid.setSizeUndefined();
         grid.setDefaultComponentAlignment(Alignment.BOTTOM_LEFT);
-        grid.setRowExpandRatio(2, 4);
 
         grid.addComponent(usernameField, 1, 0);
         grid.addComponent(firstPasswordField, 1, 3);

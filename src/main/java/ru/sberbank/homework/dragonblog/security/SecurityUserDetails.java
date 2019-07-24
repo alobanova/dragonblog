@@ -8,6 +8,7 @@ import ru.sberbank.homework.dragonblog.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Created by Mart
@@ -20,7 +21,6 @@ public class SecurityUserDetails extends User implements UserDetails {
         if(user==null) return;
         this.setId(user.getId());
         this.setNickname(user.getNickname());
-        this.setPassword(user.getPassword());
         this.setRoles(user.getRoles());
     }
 
@@ -40,8 +40,13 @@ public class SecurityUserDetails extends User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return super.getPassword();
+    public Set<Role> getRoles() {
+        return super.getRoles();
+    }
+
+    @Override
+    public Long getId() {
+        return super.getId();
     }
 
     @Override
