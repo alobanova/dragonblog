@@ -95,6 +95,21 @@ $v-margin-menu-items: 15px;
     margin-right: 0;
   }
 
+  .label-text-yellow {
+    color: #fff96b;
+    font-size: large;
+  }
+
+  .label-text-green {
+    color: #1eff0d;
+    font-size: large;
+  }
+
+  .label-text-red {
+    color: #ff0a09;
+    font-size: large;
+  }
+
 
   ::-webkit-scrollbar { width: 5px; height: 5px;}
   ::-webkit-scrollbar-button {  background-color: #666; }

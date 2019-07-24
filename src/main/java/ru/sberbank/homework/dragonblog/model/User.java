@@ -1,11 +1,10 @@
 package ru.sberbank.homework.dragonblog.model;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -41,8 +40,8 @@ import lombok.ToString;
 public class User {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
-    @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ")
+    @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ" , allocationSize = 1)
     private Long id;
 
     @Column(name = "nickname", unique = true, nullable = false)
@@ -87,6 +86,13 @@ public class User {
 
 //    @Getter @Setter
 //    private List<User> favorite;
+
+    public void addRole(Role role) {
+        if (CollectionUtils.isEmpty(roles)) {
+            roles = new HashSet<>();
+        }
+        roles.add(role);
+    }
 
     @Override
     public boolean equals(Object o) {

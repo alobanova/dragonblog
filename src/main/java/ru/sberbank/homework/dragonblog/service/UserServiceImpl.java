@@ -31,6 +31,11 @@ public class UserServiceImpl {
         this.converter = converter;
     }
 
+    public UiUser get(String nickname) {
+        User user = repository.findByNickname(nickname);
+        return user != null ? converter.convert(user) : null;
+    }
+
     public UiUser get(long id) throws NotFoundException {
         User user = repository.findById(id);
 
@@ -60,6 +65,14 @@ public class UserServiceImpl {
         User user = converter.convertBack(uiUser);
 
         return update(id, user);
+    }
+
+    public void saveNewUser(User user) {
+        String lowerNickname = user.getNickname().toLowerCase();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        user.setNickname(lowerNickname);
+        repository.save(user);
     }
 
     public UiUser create(User user) {
