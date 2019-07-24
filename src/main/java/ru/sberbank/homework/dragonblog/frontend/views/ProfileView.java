@@ -3,18 +3,12 @@ package ru.sberbank.homework.dragonblog.frontend.views;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Image;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,6 +40,7 @@ public class ProfileView extends HorizontalLayout implements View {
     private final Panel imagePanel = new Panel();
     private final FormLayout info = new FormLayout();
     private final FormLayout postsLayout = new FormLayout();
+
     private Label noPost = new Label("У пользователя еще нет постов");
     private Button favouriteBtn = new Button(VaadinIcons.CHECK, this::deleteFavourite);
     private Button nonFavouriteBtn = new Button(VaadinIcons.STAR, this::setFavourite);
@@ -156,12 +151,22 @@ public class ProfileView extends HorizontalLayout implements View {
         service.deleteFavouriteUser(userSecurity.getId(), user.getId());
         favouriteBtn.setVisible(false);
         nonFavouriteBtn.setVisible(true);
+
+        Notification notif = new Notification("вы отписались");
+        notif.setDelayMsec(2000);
+        notif.setPosition(Position.TOP_CENTER);
+        notif.show(Page.getCurrent());
     }
 
     private void setFavourite(Button.ClickEvent event) {
         service.saveFavouriteUser(userSecurity.getId(), user.getId());
         nonFavouriteBtn.setVisible(false);
         favouriteBtn.setVisible(true);
+
+        Notification notif =  new Notification("вы подписались");
+        notif.setPosition(Position.TOP_CENTER);
+        notif.setDelayMsec(2000);
+        notif.show(Page.getCurrent());
     }
 
     private FormLayout initData() {
