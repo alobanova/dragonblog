@@ -18,7 +18,7 @@ public class UserConverter implements Converter<User, UiUser> {
             .ofPattern("dd.MM.yyyy", Locale.ENGLISH);
 
     @Override
-    public UiUser convert(User user) {
+    public  UiUser convert(User user) {
         String gender = user.getGender() == Gender.FEMALE ? "женский" : "мужской";
         String patronymic = user.getPatronymic() == null ? "" : user.getPatronymic();
         String city = user.getCity() == null ? "" : user.getCity();
