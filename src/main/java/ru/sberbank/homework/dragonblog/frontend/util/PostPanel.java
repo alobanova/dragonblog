@@ -24,6 +24,7 @@ public class PostPanel {
     private UiPost post;
     private FormLayout contentLayout;
     private VerticalLayout postContent = new VerticalLayout();
+    private HorizontalLayout buttonsLayout = new HorizontalLayout();
 
     private Panel panel;
     private Label text;
@@ -50,11 +51,13 @@ public class PostPanel {
 
         postContent.addComponent(text);
 
+        initButtonLayout();
+
         if(post.getAuthor().getId().equals(userSecurity.getId())) {
             postContent.addComponent(textArea);
-            HorizontalLayout buttons = formButton();
-            postContent.addComponent(buttons);
+            deployButton();
         }
+        postContent.addComponent(buttonsLayout);
 
         postContent.addComponent(openComment);
         postContent.setComponentAlignment(openComment, Alignment.MIDDLE_CENTER);
@@ -84,20 +87,20 @@ public class PostPanel {
         }
     }
 
-    private HorizontalLayout formButton() {
-        HorizontalLayout buttons = new HorizontalLayout();
-        buttons.setSizeFull();
-        buttons.setMargin(false);
-        buttons.setStyleName("layout-with-bottom-border");
+    private void initButtonLayout() {
+        buttonsLayout.setSizeFull();
+        buttonsLayout.setMargin(false);
+        buttonsLayout.setStyleName("layout-with-bottom-border");
+    }
 
-        buttons.addComponent(save);
-        buttons.addComponent(edit);
-        buttons.addComponent(delete);
+    private void deployButton() {
+        buttonsLayout.addComponent(save);
+        buttonsLayout.addComponent(edit);
+        buttonsLayout.addComponent(delete);
 
-        buttons.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
-        buttons.setExpandRatio(edit, 1.0f);
-        buttons.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
-        return buttons;
+        buttonsLayout.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
+        buttonsLayout.setExpandRatio(edit, 1.0f);
+        buttonsLayout.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
     }
 
     private void initPanel() {
