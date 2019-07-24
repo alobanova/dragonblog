@@ -32,4 +32,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM USERS WHERE ID IN"
             + " (SELECT FAVOURITE_USER_ID FROM USER_SUBSCRIPTIONS WHERE USER_ID =?1)", nativeQuery = true)
     List<User> findFavouriteUsers(long id);
+
+    @Modifying
+    @Query(value = "INSERT INTO USER_SUBSCRIPTIONS (USER_ID, FAVOURITE_USER_ID) VALUES (?1, ?2)", nativeQuery = true)
+    void saveFavouriteUser(long subscriber, long favourite);
+
+    @Modifying
+    @Query(value = "DELETE FROM USER_SUBSCRIPTIONS WHERE USER_ID = ?1 AND FAVOURITE_USER_ID = ?2", nativeQuery = true)
+    void deleteFavouriteUser(long subscriber, long favourite);
 }

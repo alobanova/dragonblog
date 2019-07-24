@@ -1,5 +1,6 @@
 package ru.sberbank.homework.dragonblog.frontend.views;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinSession;
@@ -19,7 +20,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
+import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
@@ -38,11 +41,14 @@ public class ProfileView extends HorizontalLayout implements View {
 
     private final VerticalLayout imageLayout = new VerticalLayout();
     private final VerticalLayout infoLayout = new VerticalLayout();
+    private final HorizontalLayout nickLayout = new HorizontalLayout();
 
     private final Panel imagePanel = new Panel();
     private final FormLayout info = new FormLayout();
     private final FormLayout postsLayout = new FormLayout();
     private Label noPost = new Label("У пользователя еще нет постов");
+    private Button favouriteBtn = new Button(VaadinIcons.CHECK, this::deleteFavourite);
+    private Button nonFavouriteBtn = new Button(VaadinIcons.STAR, this::setFavourite);
 
     private UiUser user;
     private UiUser userSecurity;
@@ -92,6 +98,15 @@ public class ProfileView extends HorizontalLayout implements View {
         }
     }
 
+    private boolean checkFavourite(Long userSecrId, Long userId) {
+        List<UiUser> favouriteUsers = service.findFavouriteUsers(userSecrId);
+        List<Long> favUsersId = favouriteUsers.stream()
+                .map(UiUser::getId)
+                .collect(Collectors.toList());
+
+        return favUsersId.contains(userId);
+    }
+
     private void initImagePanel() {
 
         Image avatar = AvatarUtils.imageFromByteArray(user.getAvatar());
@@ -116,9 +131,37 @@ public class ProfileView extends HorizontalLayout implements View {
 
         Label nickname = new Label("<strong>" + user.getNickname() + "</strong>", ContentMode.HTML);
         nickname.setStyleName("nickname");
-        info.addComponent(nickname);
+        nickLayout.addComponent(nickname);
+
+        Long userSecrId = userSecurity.getId();
+        Long userId = user.getId();
+
+        if (checkFavourite(userSecrId, userId)) {
+            nonFavouriteBtn.setVisible(false);
+        } else {
+           favouriteBtn.setVisible(false);
+        }
+
+        if (userId.longValue() != userSecrId.longValue()) {
+            nickLayout.addComponent(favouriteBtn);
+            nickLayout.addComponent(nonFavouriteBtn);
+        }
+
+        info.addComponent(nickLayout);
         info.addComponent(tabSheet);
         infoLayout.addComponent(info);
+    }
+
+    private void deleteFavourite(Button.ClickEvent event) {
+        service.deleteFavouriteUser(userSecurity.getId(), user.getId());
+        favouriteBtn.setVisible(false);
+        nonFavouriteBtn.setVisible(true);
+    }
+
+    private void setFavourite(Button.ClickEvent event) {
+        service.saveFavouriteUser(userSecurity.getId(), user.getId());
+        nonFavouriteBtn.setVisible(false);
+        favouriteBtn.setVisible(true);
     }
 
     private FormLayout initData() {

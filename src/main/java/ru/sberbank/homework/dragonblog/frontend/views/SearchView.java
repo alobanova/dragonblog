@@ -11,11 +11,9 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
 
-import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
-import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
 import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
 
 @SpringView(name = SearchView.NAME)
@@ -30,11 +28,9 @@ public class SearchView extends VerticalLayout implements View {
     private final Panel userPanel = new Panel();
 
     private final UserServiceImpl userService;
-    private final PostServiceImpl postService;
 
-    public SearchView(final UserServiceImpl userService, final PostServiceImpl postService) {
+    public SearchView(final UserServiceImpl userService) {
         this.userService = userService;
-        this.postService = postService;
     }
 
     @Override
