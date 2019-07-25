@@ -72,6 +72,11 @@ public class UserServiceImpl {
         if (id != user.getId()) {
             return null;
         }
+
+        String city = user.getCity();
+        city = city != null ? city.toUpperCase().charAt(0) + city.substring(1) : null;
+        user.setCity(city);
+
         repository.update(id, user.getFirstName(), user.getSurname(), user.getPatronymic(),
                 user.getGender(), user.getCity(), user.getBirthDate(), user.getDescription(), user.getAvatar());
 
