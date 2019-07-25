@@ -6,7 +6,6 @@ import ru.sberbank.homework.dragonblog.frontend.converter.CommentConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiComment;
 import ru.sberbank.homework.dragonblog.model.Comment;
 import ru.sberbank.homework.dragonblog.repository.CommentRepository;
-import ru.sberbank.homework.dragonblog.util.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +27,11 @@ public class CommentServiceImpl {
         this.converter = converter;
     }
 
-    public void update(long id, String description) throws NotFoundException {
+    public void update(long id, String description) {
         repository.update(id, description);
     }
 
-    public void delete(long id) throws NotFoundException {
+    public void delete(long id) {
         repository.deleteById(id);
     }
 

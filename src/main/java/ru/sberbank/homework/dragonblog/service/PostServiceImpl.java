@@ -7,7 +7,6 @@ import ru.sberbank.homework.dragonblog.frontend.converter.PostConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.model.Post;
 import ru.sberbank.homework.dragonblog.repository.PostRepository;
-import ru.sberbank.homework.dragonblog.util.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -28,7 +27,7 @@ public class PostServiceImpl {
         this.converter = converter;
     }
 
-    public UiPost get(long id) throws NotFoundException {
+    public UiPost get(long id) {
         Post post = repository.findById(id).orElse(null);
 
         if (post != null) {
@@ -39,11 +38,11 @@ public class PostServiceImpl {
         return null;
     }
 
-    public void delete(long id) throws NotFoundException {
+    public void delete(long id) {
         repository.deleteById(id);
     }
 
-    public UiPost update(UiPost post, long userId) throws NotFoundException {
+    public UiPost update(UiPost post, long userId) {
         if(post.getAuthor().getId() == userId) {
             Post postSave = repository.save(converter.convertBack(post));
             return converter.convert(postSave);
