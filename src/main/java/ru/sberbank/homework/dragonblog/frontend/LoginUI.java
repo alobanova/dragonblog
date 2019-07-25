@@ -4,6 +4,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.*;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -111,13 +112,16 @@ public class LoginUI extends UI {
 
     private void login() {
         try {
-            vaadinSecurity.login(userNameField.getValue().toLowerCase(), passwordField.getValue(), rememberMe.getValue());
+            vaadinSecurity.login(userNameField.getValue().toLowerCase()
+                    , passwordField.getValue(),
+                    rememberMe.getValue());
         } catch (AuthenticationException ex) {
             userNameField.focus();
             userNameField.selectAll();
             passwordField.setValue("");
             loginFailedLabel.setValue(String.format("Не удалось войти %s", ex.getMessage()));
             loginFailedLabel.setVisible(true);
+
             if (loggedOutLabel != null) {
                 loggedOutLabel.setVisible(false);
             }
