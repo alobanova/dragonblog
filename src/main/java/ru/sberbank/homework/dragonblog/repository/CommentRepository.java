@@ -13,8 +13,6 @@ import ru.sberbank.homework.dragonblog.model.Comment;
 @Transactional
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    void deleteByIdAndAuthorId(long id, long authorId);
-
     Optional<List<Comment>> findAllByPostIdOrderByDate(long id);
 
     Comment findFirstByPostIdOrderByDateDesc(long id);

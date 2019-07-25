@@ -159,12 +159,11 @@ public class PostPanel {
     }
 
     private void initButtonSave() {
-        save = new Button("Сохранить");
+        save = new Button("Сохранить", this :: updatePost);
         save.setVisible(false);
-        save.addClickListener((Button.ClickListener) event2 -> updatePost());
     }
 
-    private void updatePost() {
+    private void updatePost(Button.ClickEvent event) {
         String newDescription = textArea.getValue();
         if(newDescription != null && !newDescription.isEmpty()) {
             post.setDescription(newDescription);

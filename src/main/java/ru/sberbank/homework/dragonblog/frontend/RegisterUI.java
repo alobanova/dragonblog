@@ -83,7 +83,7 @@ public class RegisterUI extends UI {
         surnameField = new TextField("Фамилия");
         nameValidLabel = new Label("2-20 eng/рус символов");
         nickNameRuleInfo = new Label("nickname будет сохранен в нижнем регистре,");
-        nickNameRuleInfo2 = new Label("доступны только eng/рус буквы и смиволы '-' и '@'");
+        nickNameRuleInfo2 = new Label("доступны только eng/рус буквы и символы '-' и '@'");
 
         sex = new RadioButtonGroup<String>("Пол");
 

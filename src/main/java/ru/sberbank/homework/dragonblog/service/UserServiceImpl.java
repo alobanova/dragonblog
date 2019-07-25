@@ -13,7 +13,6 @@ import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.model.User;
 import ru.sberbank.homework.dragonblog.repository.UserRepository;
-import ru.sberbank.homework.dragonblog.util.NotFoundException;
 
 /**
  * Created by Mart 01.07.2019
@@ -38,7 +37,7 @@ public class UserServiceImpl {
         return user != null ? converter.convert(user) : null;
     }
 
-    public UiUser get(long id) throws NotFoundException {
+    public UiUser get(long id) {
         User user = repository.findById(id);
 
         if (user != null) {
@@ -49,7 +48,7 @@ public class UserServiceImpl {
         return null;
     }
 
-    public boolean delete(long id) throws NotFoundException {
+    public boolean delete(long id) {
         return false;
     }
 
@@ -68,7 +67,7 @@ public class UserServiceImpl {
         return uiUsers;
     }
 
-    public UiUser update(long id, User user) throws NotFoundException {
+    public UiUser update(long id, User user) {
         if (id != user.getId()) {
             return null;
         }
@@ -83,7 +82,7 @@ public class UserServiceImpl {
         return converter.convert(user);
     }
 
-    public UiUser update(long id, UiUser uiUser) throws NotFoundException {
+    public UiUser update(long id, UiUser uiUser) {
         User user = converter.convertBack(uiUser);
 
         return update(id, user);
@@ -117,7 +116,4 @@ public class UserServiceImpl {
         return null;
     }
 
-    public List<UiUser> getBySearchString(String search) {
-        return null;
-    }
 }

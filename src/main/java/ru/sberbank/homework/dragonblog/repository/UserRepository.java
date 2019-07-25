@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import ru.sberbank.homework.dragonblog.model.Gender;
-import ru.sberbank.homework.dragonblog.model.Post;
 import ru.sberbank.homework.dragonblog.model.User;
 
 

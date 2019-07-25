@@ -1,9 +1,6 @@
 package ru.sberbank.homework.dragonblog.frontend.util;
 
-import com.vaadin.event.ContextClickEvent;
-import com.vaadin.event.LayoutEvents;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.ClientConnector;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
@@ -30,6 +27,7 @@ public class CommentPanel {
     private Button delete;
     private Button save;
     private Button edit;
+    private Button cancel;
 
     public CommentPanel(CommentServiceImpl commentService, UiUser user) {
         this.commentService = commentService;
@@ -70,6 +68,7 @@ public class CommentPanel {
             initButtonSave();
             initButtonDelete();
             initButtonEdit();
+            initButtonCancel();
         }
     }
 
@@ -80,8 +79,10 @@ public class CommentPanel {
         buttons.setMargin(false);
 
         buttons.addComponent(save);
+        buttons.addComponent(cancel);
         buttons.addComponent(edit);
         buttons.addComponent(delete);
+
 
         if(!comment.getAuthor().getId().equals(userSecurity.getId())) {
             edit.setVisible(false);
@@ -90,6 +91,7 @@ public class CommentPanel {
         buttons.setComponentAlignment(delete, Alignment.MIDDLE_RIGHT);
         buttons.setComponentAlignment(edit, Alignment.MIDDLE_RIGHT);
         buttons.setExpandRatio(edit, 1.0f);
+        buttons.setExpandRatio(cancel, 1.0f);
         return buttons;
     }
 
@@ -173,28 +175,39 @@ public class CommentPanel {
             textArea.setVisible(true);
             delete.setVisible(false);
             save.setVisible(true);
+            cancel.setVisible(true);
         });
     }
 
     private void initButtonSave() {
-        save = new Button("Сохранить");
+        save = new Button("Сохранить", this::updateComment);
         save.setVisible(false);
-        save.addClickListener((Button.ClickListener) event2 -> updatePost());
     }
 
-    private void updatePost() {
+    private void updateComment(Button.ClickEvent event) {
         String newDescription = textArea.getValue();
         if (newDescription != null && !newDescription.isEmpty()) {
             comment.setDescription(newDescription);
             commentService.update(comment.getId(), newDescription);
             text.setValue(newDescription);
-            text.setVisible(true);
-            textArea.setVisible(false);
 
-            edit.setVisible(true);
-            delete.setVisible(true);
-            save.setVisible(false);
+            cancelUpdateComment(event);
         }
+    }
+
+    private void initButtonCancel() {
+        cancel = new Button("Отмена", this::cancelUpdateComment);
+        cancel.setVisible(false);
+    }
+
+    private void cancelUpdateComment(Button.ClickEvent event) {
+        text.setVisible(true);
+        textArea.setVisible(false);
+
+        edit.setVisible(true);
+        delete.setVisible(true);
+        save.setVisible(false);
+        cancel.setVisible(false);
     }
 
 

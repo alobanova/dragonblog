@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
@@ -63,6 +62,7 @@ public class ProfileView extends HorizontalLayout implements View {
         initRoot();
         initCurrentUser();
         initImagePanel();
+        initDeleteBtn();
         initInfoPanel();
         initPostsPanel();
     }
@@ -111,6 +111,11 @@ public class ProfileView extends HorizontalLayout implements View {
 
         imageLayout.addComponent(imagePanel);
         imageLayout.setWidth(95, Unit.PERCENTAGE);
+    }
+
+    private void initDeleteBtn() {
+        Button delete = new Button("Удалить профиль");
+        imageLayout.addComponent(delete);
     }
 
     private void initInfoPanel() {
