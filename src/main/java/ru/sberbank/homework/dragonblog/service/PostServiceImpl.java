@@ -12,10 +12,7 @@ import ru.sberbank.homework.dragonblog.util.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by Mart
@@ -63,6 +60,11 @@ public class PostServiceImpl {
     public List<UiPost> getAllByUser(long userId) {
         List<Post> posts = repository.findAllByAuthorIdOrderByPostDateTimeDesc(userId).orElse(Collections.emptyList());
 
+        return converter.convert(posts);
+    }
+
+    public List<UiPost> findFavouritePosts(long id) {
+        List<Post> posts = repository.findFavouritePosts(id);
         return converter.convert(posts);
     }
 

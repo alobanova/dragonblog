@@ -8,6 +8,7 @@
     <include file="create_posts_table.xml" relativeToChangelogFile="true"/>
     <include file="create_comments_table.xml" relativeToChangelogFile="true"/>
     <include file="create_roles_table.xml" relativeToChangelogFile="true"/>
+    <include file="create_user_subscriptions_table.xml" relativeToChangelogFile="true"/>
     <include file="initial_data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import ru.sberbank.homework.dragonblog.model.Gender;
+import ru.sberbank.homework.dragonblog.model.Post;
 import ru.sberbank.homework.dragonblog.model.User;
 
 
@@ -27,4 +28,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
             + "u.gender = ?5, u.city = ?6, u.birthDate = ?7, u.description = ?8, u.avatar = ?9 where u.id = ?1")
     void update(long id, String firstName, String surname, String patronymic,
                 Gender gender, String city, LocalDate date, String description, byte[] avatar);
+
+    @Query(value = "SELECT * FROM USERS WHERE ID IN"
+            + " (SELECT FAVOURITE_USER_ID FROM USER_SUBSCRIPTIONS WHERE USER_ID =?1)", nativeQuery = true)
+    List<User> findFavouriteUsers(long id);
+
+    @Modifying
+    @Query(value = "INSERT INTO USER_SUBSCRIPTIONS (USER_ID, FAVOURITE_USER_ID) VALUES (?1, ?2)", nativeQuery = true)
+    void saveFavouriteUser(long subscriber, long favourite);
+
+    @Modifying
+    @Query(value = "DELETE FROM USER_SUBSCRIPTIONS WHERE USER_ID = ?1 AND FAVOURITE_USER_ID = ?2", nativeQuery = true)
+    void deleteFavouriteUser(long subscriber, long favourite);
 }
