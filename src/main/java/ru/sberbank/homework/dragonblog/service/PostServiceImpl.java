@@ -5,13 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.homework.dragonblog.frontend.converter.PostConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
-import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.model.Post;
 import ru.sberbank.homework.dragonblog.repository.PostRepository;
 import ru.sberbank.homework.dragonblog.util.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**

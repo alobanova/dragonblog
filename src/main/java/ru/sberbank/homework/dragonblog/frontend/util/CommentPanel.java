@@ -1,9 +1,6 @@
 package ru.sberbank.homework.dragonblog.frontend.util;
 
-import com.vaadin.event.ContextClickEvent;
-import com.vaadin.event.LayoutEvents;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.ClientConnector;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
@@ -177,12 +174,11 @@ public class CommentPanel {
     }
 
     private void initButtonSave() {
-        save = new Button("Сохранить");
+        save = new Button("Сохранить", this::updatePost);
         save.setVisible(false);
-        save.addClickListener((Button.ClickListener) event2 -> updatePost());
     }
 
-    private void updatePost() {
+    private void updatePost(Button.ClickEvent event) {
         String newDescription = textArea.getValue();
         if (newDescription != null && !newDescription.isEmpty()) {
             comment.setDescription(newDescription);
