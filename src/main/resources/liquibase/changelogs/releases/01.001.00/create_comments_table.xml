@@ -57,7 +57,8 @@
                                  baseColumnNames="ID_AUTHOR"
                                  constraintName="FK_COMMENT_USER"
                                  referencedTableName="USERS"
-                                 referencedColumnNames="ID"/>
+                                 referencedColumnNames="ID"
+                                 onDelete="CASCADE"/>
         <rollback>
             <sql>
                 ALTER TABLE COMMENTS DROP FOREIGN KEY FK_COMMENT_USER;

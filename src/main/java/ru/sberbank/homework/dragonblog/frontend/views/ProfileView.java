@@ -21,6 +21,7 @@ import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
 import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
+import ru.sberbank.homework.dragonblog.model.Role;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
 import ru.sberbank.homework.dragonblog.service.CommentServiceImpl;
 import ru.sberbank.homework.dragonblog.service.PostServiceImpl;

@@ -30,7 +30,8 @@
                                  baseColumnNames="USER_ID"
                                  constraintName="FK_ROLE_ID_AUTHOR"
                                  referencedTableName="USERS"
-                                 referencedColumnNames="ID"/>
+                                 referencedColumnNames="ID"
+                                 onDelete="CASCADE"/>
 
         <rollback>
             <sql>
