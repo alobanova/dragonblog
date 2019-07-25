@@ -7,6 +7,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiComment;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
+import ru.sberbank.homework.dragonblog.model.Role;
+import ru.sberbank.homework.dragonblog.security.SecurityUtils;
 import ru.sberbank.homework.dragonblog.service.CommentServiceImpl;
 import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
 
@@ -53,9 +55,13 @@ public class PostPanel {
 
         initButtonLayout();
 
-        if(post.getAuthor().getId().equals(userSecurity.getId())) {
+        if(post.getAuthor().getId().equals(userSecurity.getId())
+        || SecurityUtils.hasRole(Role.ADMIN)) {
             postContent.addComponent(textArea);
             deployButton();
+        }
+        if(!post.getAuthor().getId().equals(userSecurity.getId())) {
+            edit.setVisible(false);
         }
         postContent.addComponent(buttonsLayout);
 
@@ -79,7 +85,8 @@ public class PostPanel {
         initCreateCommentPanel();
         initCreateCommentButton();
 
-        if(post.getAuthor().getId().equals(userSecurity.getId())) {
+        if(post.getAuthor().getId().equals(userSecurity.getId())
+        || SecurityUtils.hasRole(Role.ADMIN)) {
             initTextArea();
             initButtonDelete();
             initButtonEdit();
@@ -160,6 +167,7 @@ public class PostPanel {
 
     private void initButtonSave() {
         save = new Button("Сохранить", this :: updatePost);
+        save.setStyleName("data-about");
         save.setVisible(false);
     }
 
@@ -226,12 +234,13 @@ public class PostPanel {
         textArea.setSizeFull();
 
         Button create = new Button("Создать");
+        create.setStyleName("data-about");
 
         create.addClickListener((Button.ClickListener) event2 -> {
             String newDescription = textArea.getValue();
             if(newDescription != null && !newDescription.isEmpty()) {
                 textArea.setValue("");
-                //Чтото тут с проверкой не так на автора.. вседа же тру будет;
+
                 UiComment comment = UiComment.builder()
                         .author(userSecurity)
                         .post(post)
@@ -246,17 +255,29 @@ public class PostPanel {
             }
         });
 
+        Button cancel = new Button("Отмена", this::cancelCreateComment);
+        cancel.setStyleName("data-about");
+
+        HorizontalLayout butLayout = new HorizontalLayout();
+        butLayout.addComponent(create);
+        butLayout.addComponent(cancel);
         verticalLayout.addComponent(textArea);
-        verticalLayout.addComponent(create);
+        verticalLayout.addComponent(butLayout);
         panelCreateComment.setContent(verticalLayout);
         panelCreateComment.setVisible(false);
     }
 
     private void initCreateCommentButton(){
         createCommBut = new Button("Комментировать");
+        createCommBut.setStyleName("data-about");
         createCommBut.addClickListener((Button.ClickListener) event -> {
             panelCreateComment.setVisible(true);
             createCommBut.setVisible(false);
         });
+    }
+
+    private void cancelCreateComment(Button.ClickEvent event) {
+        panelCreateComment.setVisible(false);
+        createCommBut.setVisible(true);
     }
 }
