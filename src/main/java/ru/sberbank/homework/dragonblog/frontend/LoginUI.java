@@ -49,11 +49,19 @@ public class LoginUI extends UI {
         initFields();
         initLoginForm();
 
+        Notification registeredNotif = new Notification("вы успешно зарегистрировались");
+        registeredNotif.setPosition(Position.TOP_CENTER);
+        registeredNotif.setDelayMsec(2000);
+
+
+
+        if (VaadinSession.getCurrent().getAttribute("registered") != null) {
+            registeredNotif.show(Page.getCurrent());
+        }
 
         if (request.getParameter("logout") != null) {
             loggedOutLabel.setVisible(true);
         }
-
 
         setContent(rootLayout);
         setSizeFull();
@@ -112,9 +120,10 @@ public class LoginUI extends UI {
 
     private void login() {
         try {
-            vaadinSecurity.login(userNameField.getValue().toLowerCase()
-                    , passwordField.getValue(),
+            vaadinSecurity.login(userNameField.getValue().toLowerCase(),
+                    passwordField.getValue(),
                     rememberMe.getValue());
+
         } catch (AuthenticationException ex) {
             userNameField.focus();
             userNameField.selectAll();
@@ -126,8 +135,7 @@ public class LoginUI extends UI {
                 loggedOutLabel.setVisible(false);
             }
         } catch (Exception ex) {
-            Notification.show("An unexpected error occurred", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
-            LoggerFactory.getLogger(getClass()).error("Unexpected error while logging in", ex);
+            Notification.show("ошибка : ", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
         } finally {
             loginBtn.setEnabled(true);
         }
