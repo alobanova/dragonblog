@@ -59,10 +59,9 @@ public class PostPanel {
         || SecurityUtils.hasRole(Role.ADMIN)) {
             postContent.addComponent(textArea);
             deployButton();
+
         }
-        if(!post.getAuthor().getId().equals(userSecurity.getId())) {
-            edit.setVisible(false);
-        }
+
         postContent.addComponent(buttonsLayout);
 
         postContent.addComponent(openComment);
@@ -155,6 +154,9 @@ public class PostPanel {
         edit.setWidth("10px");
         edit.setIcon(VaadinIcons.EDIT);
 
+        if(!post.getAuthor().getId().equals(userSecurity.getId())) {
+            edit.setVisible(false);
+        }
 
         edit.addClickListener((Button.ClickListener) event1 -> {
             text.setVisible(false);
