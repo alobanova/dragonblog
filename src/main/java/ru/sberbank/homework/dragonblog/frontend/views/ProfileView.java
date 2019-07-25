@@ -115,13 +115,29 @@ public class ProfileView extends HorizontalLayout implements View {
     }
 
     private void initDeleteBtn() {
-        Button delete = new Button();
-        delete.setIcon(VaadinIcons.TRASH);
-        delete.setStyleName(ValoTheme.BUTTON_BORDERLESS);
+        boolean admin = SecurityUtils.hasRole(Role.ADMIN);
+        boolean myProfile = user.getId().longValue() == userSecurity.getId().longValue();
 
-        nickLayout.addComponent(delete);
-        nickLayout.setComponentAlignment(delete, Alignment.TOP_CENTER);
+        if (myProfile || admin) {
+            Button delete = new Button("Удалить профиль");
 
+            if (myProfile) {
+                delete.addClickListener(e -> {
+                    service.delete(user);
+                    UI.getCurrent().getPage().setLocation("/logout");
+                });
+            } else {
+                delete.addClickListener(e -> {
+                    VaadinSession.getCurrent().setAttribute("deleted", user.getNickname());
+                    service.delete(user);
+                    UI.getCurrent().getNavigator().navigateTo(SearchView.NAME);
+                });
+            }
+            delete.setIcon(VaadinIcons.TRASH);
+            delete.setStyleName(ValoTheme.BUTTON_BORDERLESS);
+            nickLayout.addComponent(delete);
+            nickLayout.setComponentAlignment(delete, Alignment.TOP_CENTER);
+        }
     }
 
     private void initInfoPanel() {
