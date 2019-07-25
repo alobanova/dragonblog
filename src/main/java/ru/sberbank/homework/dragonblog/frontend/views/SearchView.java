@@ -47,6 +47,8 @@ public class SearchView extends VerticalLayout implements View {
 
         HorizontalLayout searchLayout = new HorizontalLayout(searchField, searchBtn, favouriteBtn);
         searchLayout.setSizeFull();
+        searchLayout.setExpandRatio(searchField, 1.0f);
+        searchLayout.setExpandRatio(favouriteBtn, 1.0f);
         searchLayout.setMargin(new MarginInfo(false, false, true, false));
 
         userPanel.setWidth(100, Unit.PERCENTAGE);
