@@ -9,7 +9,7 @@
         <createTable tableName="USER_ROLES">
 
             <column name="user_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" uniqueConstraintName="FK_ROLE_ID_AUTHOR"/>
             </column>
 
             <column name="role" type="VARCHAR(256)">

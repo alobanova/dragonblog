@@ -4,6 +4,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.*;
+import com.vaadin.shared.Position;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -29,6 +30,9 @@ public class LoginUI extends UI {
         this.vaadinSecurity = vaadinSecurity;
     }
 
+    private final VerticalLayout loginLayout = new VerticalLayout();
+    private final VerticalLayout rootLayout = new VerticalLayout();
+
     private TextField userNameField;
     private PasswordField passwordField;
     private Button loginBtn;
@@ -41,22 +45,32 @@ public class LoginUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         getPage().setTitle("Страница авторизации");
+        initLayout();
+        initFields();
+        initLoginForm();
 
+
+        if (request.getParameter("logout") != null) {
+            loggedOutLabel.setVisible(true);
+        }
+
+
+        setContent(rootLayout);
+        setSizeFull();
+    }
+
+    private void initLayout() {
+        loginLayout.setSpacing(true);
+        loginLayout.setSizeUndefined();
+        rootLayout.addComponent(loginLayout);
+        rootLayout.setSizeFull();
+        rootLayout.setComponentAlignment(loginLayout, Alignment.MIDDLE_CENTER);
+    }
+
+    private void initLoginForm() {
         FormLayout loginForm = new FormLayout();
         loginForm.setSizeUndefined();
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-
-        userNameField = new TextField("Логин");
-        passwordField = new PasswordField("Пароль");
-        loginBtn = new Button("Войти");
-        registerBtn = new Button("Регистрация");
-        registerBtn.addClickListener(register());
-        rememberMe = new CheckBox("запомнить меня");
-
-        loginBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        loginBtn.setDisableOnClick(true);
-        loginBtn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        loginBtn.addClickListener(e -> login());
 
         loginForm.addComponent(userNameField);
         loginForm.addComponent(passwordField);
@@ -65,43 +79,49 @@ public class LoginUI extends UI {
         loginForm.addComponent(rememberMe);
         loginForm.addComponent(horizontalLayout);
 
-        VerticalLayout loginLayout = new VerticalLayout();
-        loginLayout.setSpacing(true);
-        loginLayout.setSizeUndefined();
+        loggedOutLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
+        loggedOutLabel.setSizeUndefined();
+        loginLayout.addComponent(loggedOutLabel);
+        loginLayout.setComponentAlignment(loggedOutLabel, Alignment.BOTTOM_CENTER);
 
-        if (request.getParameter("logout") != null) {
-            loggedOutLabel = new Label("Вы вышли ненадолго, возвращайтесь снова!");
-            loggedOutLabel.addStyleName(ValoTheme.LABEL_SUCCESS);
-            loggedOutLabel.setSizeUndefined();
-            loginLayout.addComponent(loggedOutLabel);
-            loginLayout.setComponentAlignment(loggedOutLabel, Alignment.BOTTOM_CENTER);
-        }
+        loginLayout.addComponent(loginForm);
+        loginLayout.setComponentAlignment(loginForm, Alignment.TOP_CENTER);
+    }
+
+    private void initFields() {
+        userNameField = new TextField("Логин");
+        passwordField = new PasswordField("Пароль");
+        loginBtn = new Button("Войти");
+        registerBtn = new Button("Регистрация");
+        registerBtn.addClickListener(register());
+        rememberMe = new CheckBox("запомнить меня");
+        loggedOutLabel = new Label("Вы вышли ненадолго, возвращайтесь снова!");
+
+        loggedOutLabel.setVisible(false);
+        loginBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        loginBtn.setDisableOnClick(true);
+        loginBtn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        loginBtn.addClickListener(e -> login());
 
         loginLayout.addComponent(loginFailedLabel = new Label());
         loginLayout.setComponentAlignment(loginFailedLabel, Alignment.BOTTOM_CENTER);
         loginFailedLabel.setSizeUndefined();
         loginFailedLabel.addStyleName(ValoTheme.LABEL_FAILURE);
         loginFailedLabel.setVisible(false);
-
-        loginLayout.addComponent(loginForm);
-        loginLayout.setComponentAlignment(loginForm, Alignment.TOP_CENTER);
-
-        VerticalLayout rootLayout = new VerticalLayout(loginLayout);
-        rootLayout.setSizeFull();
-        rootLayout.setComponentAlignment(loginLayout, Alignment.MIDDLE_CENTER);
-        setContent(rootLayout);
-        setSizeFull();
     }
 
     private void login() {
         try {
-            vaadinSecurity.login(userNameField.getValue(), passwordField.getValue(), rememberMe.getValue());
+            vaadinSecurity.login(userNameField.getValue().toLowerCase()
+                    , passwordField.getValue(),
+                    rememberMe.getValue());
         } catch (AuthenticationException ex) {
             userNameField.focus();
             userNameField.selectAll();
             passwordField.setValue("");
             loginFailedLabel.setValue(String.format("Не удалось войти %s", ex.getMessage()));
             loginFailedLabel.setVisible(true);
+
             if (loggedOutLabel != null) {
                 loggedOutLabel.setVisible(false);
             }
