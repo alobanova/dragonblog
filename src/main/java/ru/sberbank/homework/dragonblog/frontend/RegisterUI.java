@@ -4,6 +4,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.data.HasValue;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -125,7 +126,10 @@ public class RegisterUI extends UI {
                 Gender gender = sex.getValue().equals("мужской") ? Gender.MALE : Gender.FEMALE;
                 user.addRole(Role.USER);
                 user.setGender(gender);
+
                 userService.saveNewUser(user);
+
+                VaadinSession.getCurrent().setAttribute("registered", true);
                 UI.getCurrent().getPage().setLocation("/login");
             }
         };

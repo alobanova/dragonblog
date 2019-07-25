@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
@@ -48,8 +49,8 @@ public class UserServiceImpl {
         return null;
     }
 
-    public boolean delete(long id) {
-        return false;
+    public void delete(UiUser uiUser) {
+        repository.delete(converter.convertBack(uiUser));
     }
 
     public List<UiUser> findByPartOfNickname(String value) {
@@ -108,6 +109,7 @@ public class UserServiceImpl {
         List<User> users = repository.findFavouriteUsers(id);
         return converter.convert(users);
     }
+
     public UiUser create(User user) {
         return null;
     }
