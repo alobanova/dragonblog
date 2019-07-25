@@ -62,6 +62,7 @@ public class ProfileView extends HorizontalLayout implements View {
         initRoot();
         initCurrentUser();
         initImagePanel();
+        initDeleteBtn();
         initInfoPanel();
         initPostsPanel();
     }
@@ -110,6 +111,11 @@ public class ProfileView extends HorizontalLayout implements View {
 
         imageLayout.addComponent(imagePanel);
         imageLayout.setWidth(95, Unit.PERCENTAGE);
+    }
+
+    private void initDeleteBtn() {
+        Button delete = new Button("Удалить профиль");
+        imageLayout.addComponent(delete);
     }
 
     private void initInfoPanel() {
