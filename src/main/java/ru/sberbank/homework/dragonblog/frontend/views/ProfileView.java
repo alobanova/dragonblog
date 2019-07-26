@@ -116,28 +116,18 @@ public class ProfileView extends HorizontalLayout implements View {
     }
 
     private void initDeleteBtn() {
-        boolean admin = SecurityUtils.hasRole(Role.ADMIN);
-        boolean myProfile = user.getId().longValue() == userSecurity.getId().longValue();
+        if (SecurityUtils.hasRole(Role.ADMIN)) {
+            Button deleteBtn = new Button("Удалить профиль");
+            deleteBtn.addClickListener(e -> {
+                VaadinSession.getCurrent().setAttribute("deleted", user.getNickname());
+                service.delete(user);
+                UI.getCurrent().getNavigator().navigateTo(SearchView.NAME);
+            });
 
-        if (myProfile || admin) {
-            Button delete = new Button("Удалить профиль");
-
-            if (myProfile) {
-                delete.addClickListener(e -> {
-                    service.delete(user);
-                    UI.getCurrent().getPage().setLocation("/logout");
-                });
-            } else {
-                delete.addClickListener(e -> {
-                    VaadinSession.getCurrent().setAttribute("deleted", user.getNickname());
-                    service.delete(user);
-                    UI.getCurrent().getNavigator().navigateTo(SearchView.NAME);
-                });
-            }
-            delete.setIcon(VaadinIcons.TRASH);
-            delete.setStyleName(ValoTheme.BUTTON_BORDERLESS);
-            nickLayout.addComponent(delete);
-            nickLayout.setComponentAlignment(delete, Alignment.TOP_CENTER);
+            deleteBtn.setIcon(VaadinIcons.TRASH);
+            deleteBtn.setStyleName(ValoTheme.BUTTON_BORDERLESS);
+            nickLayout.addComponent(deleteBtn);
+            nickLayout.setComponentAlignment(deleteBtn, Alignment.TOP_CENTER);
         }
     }
 
