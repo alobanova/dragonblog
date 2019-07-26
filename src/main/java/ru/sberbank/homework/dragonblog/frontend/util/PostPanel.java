@@ -233,6 +233,7 @@ public class PostPanel {
 
         TextArea textArea = new TextArea();
         textArea.setPlaceholder("Начните писать ваш новый комментарий...");
+        textArea.setMaxLength(500);
         textArea.setSizeFull();
 
         Button create = new Button("Создать");

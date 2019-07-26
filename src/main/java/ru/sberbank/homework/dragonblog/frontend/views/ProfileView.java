@@ -261,6 +261,7 @@ public class ProfileView extends HorizontalLayout implements View {
         VerticalLayout verticalLayout = new VerticalLayout();
 
         TextArea textArea = new TextArea();
+        textArea.setMaxLength(1200);
         textArea.setPlaceholder("Начните писать ваш новый пост...");
         textArea.setSizeFull();
 
