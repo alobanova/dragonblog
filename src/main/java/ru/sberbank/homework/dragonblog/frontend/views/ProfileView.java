@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
+import ru.sberbank.homework.dragonblog.frontend.util.DeleteWindow;
 import ru.sberbank.homework.dragonblog.frontend.util.ImageUtils;
 import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
 import ru.sberbank.homework.dragonblog.model.Role;
@@ -45,6 +46,8 @@ public class ProfileView extends HorizontalLayout implements View {
     private Label noPost = new Label("У пользователя еще нет постов");
     private Button favouriteBtn = new Button(VaadinIcons.CHECK, this::deleteFavourite);
     private Button nonFavouriteBtn = new Button(VaadinIcons.STAR, this::setFavourite);
+    private Button adminBtn = new Button(VaadinIcons.USER_STAR, this::removeAdminRole);
+    private Button userBtn = new Button(VaadinIcons.USER, this::addAdminRole);
 
     private UiUser user;
     private UiUser userSecurity;
@@ -66,6 +69,7 @@ public class ProfileView extends HorizontalLayout implements View {
         initImagePanel();
         initInfoPanel();
         initDeleteBtn();
+        initAdminBtn();
         initPostsPanel();
     }
 
@@ -115,13 +119,70 @@ public class ProfileView extends HorizontalLayout implements View {
         imageLayout.setWidth(95, Unit.PERCENTAGE);
     }
 
+    private void initAdminBtn() {
+        if (SecurityUtils.hasRole(Role.ADMIN)) {
+            if (user.getRoles().contains(Role.ADMIN)) {
+                adminBtn.setVisible(true);
+                userBtn.setVisible(false);
+            } else {
+                adminBtn.setVisible(false);
+                userBtn.setVisible(true);
+            }
+
+            nickLayout.addComponent(userBtn);
+            nickLayout.addComponent(adminBtn);
+        }
+    }
+
+    private void addAdminRole(Button.ClickEvent event) {
+        service.addRole(user.getId(), Role.ADMIN);
+        userBtn.setVisible(false);
+        adminBtn.setVisible(true);
+
+        Notification addAdmin = new Notification("пользователю "
+                + user.getNickname() + " теперь администратор");
+        addAdmin.setDelayMsec(1000);
+        addAdmin.setPosition(Position.TOP_CENTER);
+        addAdmin.show(Page.getCurrent());
+    }
+
+    private void removeAdminRole(Button.ClickEvent event) {
+        if (user.getId().equals(userSecurity.getId())) {
+            Notification burden = new Notification("это твоё бремя");
+            burden.setStyleName(ValoTheme.NOTIFICATION_FAILURE);
+            burden.setDelayMsec(2000);
+            burden.setPosition(Position.TOP_CENTER);
+            burden.show(Page.getCurrent());
+        } else {
+            service.deleteRole(user.getId(), Role.ADMIN);
+            adminBtn.setVisible(false);
+            userBtn.setVisible(true);
+
+            Notification remAdmin = new Notification("пользователь "
+                    + user.getNickname() + " больше не администратор");
+            remAdmin.setDelayMsec(1000);
+            remAdmin.setPosition(Position.TOP_CENTER);
+            remAdmin.show(Page.getCurrent());
+        }
+    }
+
     private void initDeleteBtn() {
         if (SecurityUtils.hasRole(Role.ADMIN)) {
             Button deleteBtn = new Button("Удалить профиль");
+
             deleteBtn.addClickListener(e -> {
-                VaadinSession.getCurrent().setAttribute("deleted", user.getNickname());
-                service.delete(user);
-                UI.getCurrent().getNavigator().navigateTo(SearchView.NAME);
+                DeleteWindow deleteWindow = new DeleteWindow("");
+                deleteWindow.setValue("Удалить профиль пользователя" + " "
+                        + user.getNickname());
+
+                deleteWindow.addOkBtnListener( event -> {
+                    VaadinSession.getCurrent().setAttribute("deleted", user.getNickname());
+                    service.delete(user);
+                    UI.getCurrent().getNavigator().navigateTo(SearchView.NAME);
+                    deleteWindow.close();
+                });
+
+                getUI().addWindow(deleteWindow);
             });
 
             deleteBtn.setIcon(VaadinIcons.TRASH);
