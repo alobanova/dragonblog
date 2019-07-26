@@ -51,4 +51,8 @@ public class EditInfoFields {
         about.setMaxLength(1000);
         about.setRows(9);
     }
+
+    public static String formatString(String string) {
+        return string.substring(0, 1).toUpperCase() + string.substring(1);
+    }
 }

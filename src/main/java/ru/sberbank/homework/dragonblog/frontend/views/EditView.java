@@ -24,7 +24,7 @@ import javax.annotation.PostConstruct;
 
 import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
-import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
+import ru.sberbank.homework.dragonblog.frontend.util.ImageUtils;
 import ru.sberbank.homework.dragonblog.frontend.util.CustomButton;
 import ru.sberbank.homework.dragonblog.frontend.util.DeleteWindow;
 import ru.sberbank.homework.dragonblog.frontend.util.EditInfoFields;
@@ -107,7 +107,7 @@ public class EditView extends VerticalLayout implements View {
     private void initImagePanel() {
         imageLayout.setSizeFull();
 
-        avatar = AvatarUtils.imageFromByteArray(user.getAvatar());
+        avatar = ImageUtils.imageFromByteArray(user.getAvatar());
 
         imagePanel.setPrimaryStyleName("image-panel");
         imagePanel.setContent(avatar);
@@ -150,11 +150,13 @@ public class EditView extends VerticalLayout implements View {
             infoLayout.addComponent(FAIL_LABEL);
             return;
         }
+        firstName = EditInfoFields.formatString(firstName);
+        surname = EditInfoFields.formatString(surname);
 
-        String patronymic = fields.getPatronymic().getValue();
+        String patronymic = EditInfoFields.formatString(fields.getPatronymic().getValue());
         String gender = fields.getGender().getValue();
         String birthday = UserConverter.convertDateToString(fields.getBirthday().getValue());
-        String city = fields.getCity().getValue();
+        String city = EditInfoFields.formatString( fields.getCity().getValue());
         String about = fields.getAbout().getValue();
 
         UiUser uiUser = UiUser.builder()
@@ -182,7 +184,7 @@ public class EditView extends VerticalLayout implements View {
                 public void close() throws IOException {
                     super.close();
                     avatarBytes = toByteArray();
-                    avatar = AvatarUtils.imageFromByteArray(avatarBytes);
+                    avatar = ImageUtils.imageFromByteArray(avatarBytes);
                     imagePanel.setContent(avatar);
                 }
             };

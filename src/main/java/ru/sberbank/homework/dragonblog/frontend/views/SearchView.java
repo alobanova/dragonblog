@@ -14,7 +14,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.List;
 
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
-import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
+import ru.sberbank.homework.dragonblog.frontend.util.ImageUtils;
 import ru.sberbank.homework.dragonblog.frontend.util.CustomButton;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
 import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
@@ -103,7 +103,7 @@ public class SearchView extends VerticalLayout implements View {
                 UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME);
             });
 
-            Panel imagePanel = new Panel(AvatarUtils.imageFromByteArray(findUser.getAvatar()));
+            Panel imagePanel = new Panel(ImageUtils.imageFromByteArray(findUser.getAvatar()));
             imagePanel.setWidth(50, Unit.PIXELS);
             imagePanel.setStyleName(ValoTheme.PANEL_WELL);
 

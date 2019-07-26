@@ -104,7 +104,7 @@ public class CommentPanel {
 
         HorizontalLayout layout = new HorizontalLayout();
 
-        Image avatar = AvatarUtils.imageFromByteArray(author.getAvatar());
+        Image avatar = ImageUtils.imageFromByteArray(author.getAvatar());
         avatar.setHeight(50, Sizeable.Unit.PIXELS);
         avatar.setWidth(50, Sizeable.Unit.PIXELS);
         avatar.setStyleName("image-panel");
