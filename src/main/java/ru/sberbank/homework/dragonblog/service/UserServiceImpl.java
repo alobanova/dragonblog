@@ -5,10 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
@@ -123,13 +121,4 @@ public class UserServiceImpl {
         List<User> users = repository.findFavouriteUsers(id);
         return converter.convert(users);
     }
-
-    public UiUser create(User user) {
-        return null;
-    }
-
-    public List<UiUser> getAll() {
-        return null;
-    }
-
 }

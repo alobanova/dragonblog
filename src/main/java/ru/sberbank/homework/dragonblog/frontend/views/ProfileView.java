@@ -23,7 +23,6 @@ import ru.sberbank.homework.dragonblog.frontend.util.DeleteWindow;
 import ru.sberbank.homework.dragonblog.frontend.util.ImageUtils;
 import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
 import ru.sberbank.homework.dragonblog.model.Role;
-import ru.sberbank.homework.dragonblog.model.User;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
 import ru.sberbank.homework.dragonblog.service.CommentServiceImpl;
 import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
