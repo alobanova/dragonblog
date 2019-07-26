@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
-import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
+import ru.sberbank.homework.dragonblog.frontend.util.ImageUtils;
 import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
 import ru.sberbank.homework.dragonblog.model.Role;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
@@ -106,7 +106,7 @@ public class ProfileView extends HorizontalLayout implements View {
 
     private void initImagePanel() {
 
-        Image avatar = AvatarUtils.imageFromByteArray(user.getAvatar());
+        Image avatar = ImageUtils.imageFromByteArray(user.getAvatar());
 
         imagePanel.setPrimaryStyleName("image-panel");
         imagePanel.setContent(avatar);

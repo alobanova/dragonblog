@@ -6,7 +6,7 @@ import com.vaadin.ui.Image;
 
 import java.io.ByteArrayInputStream;
 
-public class AvatarUtils {
+public class ImageUtils {
 
     public static Image imageFromByteArray(byte[] array) {
         Image avatar = new Image();

@@ -1,13 +1,12 @@
 package ru.sberbank.homework.dragonblog.frontend.model;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 /**
- * Created by Mart
- * 01.07.2019
+ * Created by Mart 01.07.2019
  **/
 
 @Getter

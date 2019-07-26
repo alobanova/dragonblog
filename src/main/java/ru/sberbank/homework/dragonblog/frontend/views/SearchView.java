@@ -14,7 +14,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.List;
 
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
-import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
+import ru.sberbank.homework.dragonblog.frontend.util.ImageUtils;
+import ru.sberbank.homework.dragonblog.frontend.util.CustomButton;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
 import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
 
@@ -93,9 +94,16 @@ public class SearchView extends VerticalLayout implements View {
             Panel userPanel = new Panel();
             userPanel.setWidth(100, Unit.PERCENTAGE);
 
-            UserButton userButton = new UserButton(findUser);
+            CustomButton userButton = new CustomButton(String.format("%s %s", findUser.getSurname(),
+                    findUser.getFirstName()));
 
-            Panel imagePanel = new Panel(AvatarUtils.imageFromByteArray(findUser.getAvatar()));
+            userButton.addClickListener(event -> {
+                VaadinSession.getCurrent().setAttribute("user_id", findUser.getId());
+
+                UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME);
+            });
+
+            Panel imagePanel = new Panel(ImageUtils.imageFromByteArray(findUser.getAvatar()));
             imagePanel.setWidth(50, Unit.PIXELS);
             imagePanel.setStyleName(ValoTheme.PANEL_WELL);
 
@@ -123,26 +131,5 @@ public class SearchView extends VerticalLayout implements View {
     private void favourite(Button.ClickEvent event) {
         usersLayout.removeAllComponents();
         initFavouriteView();
-    }
-
-    public final class UserButton extends Button {
-
-        private final UiUser user;
-
-        public UserButton(final UiUser user) {
-            this.user = user;
-            String caption = String.format("%s %s", user.getSurname(), user.getFirstName());
-
-            setPrimaryStyleName(ValoTheme.MENU_ITEM);
-            setCaption(caption);
-
-            addClickListener(this::userClick);
-        }
-
-        private void userClick(final ClickEvent event) {
-            VaadinSession.getCurrent().setAttribute("user_id", user.getId());
-
-            UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME);
-        }
     }
 }

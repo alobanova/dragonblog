@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByNickname(String nickname);
 
+    void deleteById(long id);
+
     @Query(value = "select * from USERS WHERE nickname LIKE ?1", nativeQuery = true)
     List<User> findByNicknameRegex(String regex);
 

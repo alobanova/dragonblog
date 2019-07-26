@@ -1,38 +1,37 @@
 package ru.sberbank.homework.dragonblog.frontend.views;
 
 import com.vaadin.navigator.View;
-import com.vaadin.server.FileResource;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.navigator.SpringNavigator;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
 
 import javax.annotation.PostConstruct;
 
 import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
-import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
+import ru.sberbank.homework.dragonblog.frontend.util.ImageUtils;
+import ru.sberbank.homework.dragonblog.frontend.util.CustomButton;
+import ru.sberbank.homework.dragonblog.frontend.util.DeleteWindow;
 import ru.sberbank.homework.dragonblog.frontend.util.EditInfoFields;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
 import ru.sberbank.homework.dragonblog.service.UserServiceImpl;
 
 import static com.vaadin.ui.Upload.Receiver;
-import static com.vaadin.ui.Upload.SucceededEvent;
-import static com.vaadin.ui.Upload.SucceededListener;
 
 @SpringView(name = EditView.NAME)
 public class EditView extends VerticalLayout implements View {
@@ -49,8 +48,8 @@ public class EditView extends VerticalLayout implements View {
 
     private final UserServiceImpl service;
     private UiUser user;
-    private File newAvatar;
     private Image avatar;
+    private byte[] avatarBytes = null;
 
     private final Label FAIL_LABEL = new Label("Заполните все обязательные поля");
 
@@ -78,16 +77,37 @@ public class EditView extends VerticalLayout implements View {
         splitPanel.setSplitPosition(70, Unit.PERCENTAGE);
         splitPanel.setLocked(true);
         splitPanel.setStyleName("data-about");
+        splitPanel.setSizeFull();
 
         FAIL_LABEL.setStyleName(ValoTheme.LABEL_FAILURE);
 
+        CustomButton deleteBtn = new CustomButton("Удалить свою страницу");
+        deleteBtn.setSizeFull();
+        deleteBtn.setStyleName("label-red-small");
+        deleteBtn.addClickListener(event -> {
+            DeleteWindow deleteWindow = new DeleteWindow("");
+            deleteWindow.addOkBtnListener(event1 -> {
+                service.delete(user.getId());
+                UI.getCurrent().getPage().setLocation("/logout");
+            });
+
+            getUI().addWindow(deleteWindow);
+        });
+
+        HorizontalLayout bottomLayout = new HorizontalLayout(deleteBtn);
+        bottomLayout.setSizeFull();
+        bottomLayout.setComponentAlignment(deleteBtn, Alignment.BOTTOM_CENTER);
+
         addComponent(splitPanel);
+        addComponent(bottomLayout);
+        setExpandRatio(splitPanel, 19);
+        setExpandRatio(bottomLayout, 1);
     }
 
     private void initImagePanel() {
         imageLayout.setSizeFull();
 
-        avatar = AvatarUtils.imageFromByteArray(user.getAvatar());
+        avatar = ImageUtils.imageFromByteArray(user.getAvatar());
 
         imagePanel.setPrimaryStyleName("image-panel");
         imagePanel.setContent(avatar);
@@ -97,7 +117,6 @@ public class EditView extends VerticalLayout implements View {
         Upload upload = new Upload("", receiver);
         upload.setButtonCaption("Загрузить");
         upload.setImmediateMode(true);
-        upload.addSucceededListener(receiver);
         upload.setAcceptMimeTypes("image/jpeg");
 
         imageLayout.addComponent(imagePanel);
@@ -131,24 +150,14 @@ public class EditView extends VerticalLayout implements View {
             infoLayout.addComponent(FAIL_LABEL);
             return;
         }
+        firstName = EditInfoFields.formatString(firstName);
+        surname = EditInfoFields.formatString(surname);
 
-
-        String patronymic = fields.getPatronymic().getValue();
+        String patronymic = EditInfoFields.formatString(fields.getPatronymic().getValue());
         String gender = fields.getGender().getValue();
         String birthday = UserConverter.convertDateToString(fields.getBirthday().getValue());
-        String city = fields.getCity().getValue();
+        String city = EditInfoFields.formatString( fields.getCity().getValue());
         String about = fields.getAbout().getValue();
-
-        byte[] bytes = null;
-        if(newAvatar != null) {
-            try {
-                bytes = Files.readAllBytes(newAvatar.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            bytes = user.getAvatar();
-        }
 
         UiUser uiUser = UiUser.builder()
                 .id(user.getId())
@@ -159,31 +168,26 @@ public class EditView extends VerticalLayout implements View {
                 .birthDate(birthday)
                 .city(city)
                 .description(about)
-                .avatar(bytes)
+                .avatar(avatarBytes)
                 .build();
-
 
         service.update(user.getId(), uiUser);
         navigator.navigateTo(ProfileView.NAME);
     }
 
-    private class AvatarReceiver implements Receiver, SucceededListener {
+    private class AvatarReceiver implements Receiver {
 
         @Override
         public OutputStream receiveUpload(final String filename, final String mimeType) {
-            FileOutputStream fos = null;
-            newAvatar = new File(filename);
-            try {
-                fos = new FileOutputStream(newAvatar);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            return fos;
-        }
-
-        @Override
-        public void uploadSucceeded(final SucceededEvent event) {
-            avatar.setSource(new FileResource(newAvatar));
+            return new ByteArrayOutputStream() {
+                @Override
+                public void close() throws IOException {
+                    super.close();
+                    avatarBytes = toByteArray();
+                    avatar = ImageUtils.imageFromByteArray(avatarBytes);
+                    imagePanel.setContent(avatar);
+                }
+            };
         }
     }
 }
