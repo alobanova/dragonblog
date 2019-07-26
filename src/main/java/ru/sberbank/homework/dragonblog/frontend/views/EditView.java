@@ -83,7 +83,7 @@ public class EditView extends VerticalLayout implements View {
 
         CustomButton deleteBtn = new CustomButton("Удалить свою страницу");
         deleteBtn.setSizeFull();
-        deleteBtn.setStyleName("label-red-small");
+        deleteBtn.setStyleName("data-about");
         deleteBtn.addClickListener(event -> {
             DeleteWindow deleteWindow = new DeleteWindow("");
             deleteWindow.addOkBtnListener(event1 -> {
@@ -146,7 +146,7 @@ public class EditView extends VerticalLayout implements View {
         String firstName = fields.getFirstName().getValue();
         String surname = fields.getSurname().getValue();
 
-        if (firstName.equals("") || surname.equals("")) {
+        if (firstName.isEmpty() || surname.isEmpty()) {
             infoLayout.addComponent(FAIL_LABEL);
             return;
         }
@@ -154,6 +154,9 @@ public class EditView extends VerticalLayout implements View {
         surname = EditInfoFields.formatString(surname);
 
         String patronymic = EditInfoFields.formatString(fields.getPatronymic().getValue());
+
+        byte[] avatar = avatarBytes != null ? avatarBytes : user.getAvatar();
+
         String gender = fields.getGender().getValue();
         String birthday = UserConverter.convertDateToString(fields.getBirthday().getValue());
         String city = EditInfoFields.formatString( fields.getCity().getValue());
@@ -168,7 +171,7 @@ public class EditView extends VerticalLayout implements View {
                 .birthDate(birthday)
                 .city(city)
                 .description(about)
-                .avatar(avatarBytes)
+                .avatar(avatar)
                 .build();
 
         service.update(user.getId(), uiUser);

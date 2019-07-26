@@ -10,6 +10,7 @@ import com.vaadin.ui.Window;
 public class DeleteWindow extends Window {
 
     private final Button okBtn = new Button("Да");
+    private final Button cancelBtn = new Button("Нет", event1 -> close());
 
     public DeleteWindow(String caption) {
         super(caption);
@@ -21,7 +22,8 @@ public class DeleteWindow extends Window {
 
         Label deleteLabel = new Label("Вы уверены, что хотите удалить свой профиль?");
 
-        Button cancelBtn = new Button("Нет", event1 -> close());
+        okBtn.setStyleName("data-about");
+        cancelBtn.setStyleName("data-about");
 
         HorizontalLayout buttonLayout = new HorizontalLayout(okBtn, cancelBtn);
         buttonLayout.setSizeFull();
