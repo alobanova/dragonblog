@@ -47,12 +47,16 @@ public class EditInfoFields {
         city = new TextField("Город ", user.getCity());
         about = new TextArea("О себе ", user.getDescription());
 
-        about.setWidth(80, Sizeable.Unit.PERCENTAGE);
+        about.setWidth(90, Sizeable.Unit.PERCENTAGE);
         about.setMaxLength(1000);
         about.setRows(9);
     }
 
     public static String formatString(String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
+        if (string != null && !string.isEmpty()) {
+            return string.substring(0, 1).toUpperCase() + string.substring(1);
+        } else {
+            return string;
+        }
     }
 }
