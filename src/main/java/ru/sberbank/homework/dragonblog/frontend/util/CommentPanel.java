@@ -1,6 +1,7 @@
 package ru.sberbank.homework.dragonblog.frontend.util;
 
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.Page;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.ContentMode;
@@ -116,6 +117,7 @@ public class CommentPanel {
         nameComment.addClickListener((Button.ClickListener) event -> {
             VaadinSession.getCurrent().setAttribute("user_id", author.getId());
             UI.getCurrent().getNavigator().navigateTo(ProfileView.NAME);
+            Page.getCurrent().reload();
         });
 
         Label date = new Label(comment.getDate());
