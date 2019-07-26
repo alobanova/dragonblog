@@ -1,9 +1,12 @@
 package ru.sberbank.homework.dragonblog.frontend.model;
 
 import java.util.List;
+import java.util.Set;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import ru.sberbank.homework.dragonblog.model.Role;
 
 /**
  * Created by Mart 01.07.2019
@@ -34,4 +37,6 @@ public class UiUser {
     private byte[] avatar;
 
     private List<UiPost> posts;
+
+    private Set<Role> roles;
 }

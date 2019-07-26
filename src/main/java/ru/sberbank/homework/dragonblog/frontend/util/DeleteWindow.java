@@ -11,6 +11,7 @@ public class DeleteWindow extends Window {
 
     private final Button okBtn = new Button("Да");
     private final Button cancelBtn = new Button("Нет", event1 -> close());
+    private Label deleteLabel = new Label();
 
     public DeleteWindow(String caption) {
         super(caption);
@@ -20,7 +21,7 @@ public class DeleteWindow extends Window {
         setWidth(400, Unit.PIXELS);
         setHeight(150, Unit.PIXELS);
 
-        Label deleteLabel = new Label("Вы уверены, что хотите удалить свой профиль?");
+         deleteLabel.setValue("Вы уверены, что хотите удалить свой профиль?");
 
         okBtn.setStyleName("data-about");
         cancelBtn.setStyleName("data-about");
@@ -34,6 +35,10 @@ public class DeleteWindow extends Window {
         vl.setSizeFull();
 
         setContent(vl);
+    }
+
+    public void setValue(String value) {
+        deleteLabel.setValue(value);
     }
 
     public void addOkBtnListener(Button.ClickListener listener) {

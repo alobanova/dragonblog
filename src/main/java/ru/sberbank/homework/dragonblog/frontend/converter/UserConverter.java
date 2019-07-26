@@ -31,6 +31,7 @@ public class UserConverter implements Converter<User, UiUser> {
                 .nickname(user.getNickname())
                 .firstName(user.getFirstName())
                 .surname(user.getSurname())
+                .roles(user.getRoles())
                 .patronymic(patronymic)
                 .gender(gender)
                 .birthDate(convertDateToString(user.getBirthDate()))
@@ -51,6 +52,7 @@ public class UserConverter implements Converter<User, UiUser> {
         user.setNickname(uiUser.getNickname());
         user.setFirstName(uiUser.getFirstName());
         user.setSurname(uiUser.getSurname());
+        user.setRoles(uiUser.getRoles());
         user.setPatronymic(patronymic);
         user.setGender(gender);
         user.setBirthDate(convertStringToDate(uiUser.getBirthDate()));
