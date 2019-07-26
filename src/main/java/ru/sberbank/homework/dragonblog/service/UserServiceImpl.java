@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 import ru.sberbank.homework.dragonblog.frontend.converter.UserConverter;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
+import ru.sberbank.homework.dragonblog.model.Role;
 import ru.sberbank.homework.dragonblog.model.User;
 import ru.sberbank.homework.dragonblog.repository.UserRepository;
 
@@ -34,7 +36,7 @@ public class UserServiceImpl {
     }
 
     public UiUser findByNickname(String nickname) {
-        User user = nickname != null ? repository.findByNickname(nickname) : null;
+        User user = (nickname != null) ? repository.findByNickname(nickname) : null;
         return user != null ? converter.convert(user) : null;
     }
 
@@ -70,6 +72,14 @@ public class UserServiceImpl {
         }
 
         return uiUsers;
+    }
+
+    public void addRole(long userId, Role role) {
+        repository.addRole(userId, role.getAuthority());
+    }
+
+    public void deleteRole(long userId, Role role) {
+        repository.deleteRole(userId, role.getAuthority());
     }
 
     public UiUser update(long id, User user) {

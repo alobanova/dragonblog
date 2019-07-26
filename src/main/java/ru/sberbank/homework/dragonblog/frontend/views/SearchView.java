@@ -46,6 +46,7 @@ public class SearchView extends VerticalLayout implements View {
         if (VaadinSession.getCurrent().getAttribute("deleted") != null) {
             String deletedUsername = VaadinSession.getCurrent().getAttribute("deleted").toString();
             Notification notif = new Notification("профиль " + deletedUsername + " удален");
+            VaadinSession.getCurrent().setAttribute("deleted", null);
             notif.setPosition(Position.TOP_CENTER);
             notif.setDelayMsec(2000);
             notif.show(Page.getCurrent());

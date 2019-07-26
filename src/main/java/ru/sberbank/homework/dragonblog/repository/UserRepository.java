@@ -42,4 +42,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query(value = "DELETE FROM USER_SUBSCRIPTIONS WHERE USER_ID = ?1 AND FAVOURITE_USER_ID = ?2", nativeQuery = true)
     void deleteFavouriteUser(long subscriber, long favourite);
+
+    @Modifying
+    @Query(value = "INSERT INTO USER_ROLES (USER_ID, ROLE) VALUES (?1, ?2)" , nativeQuery = true)
+    void addRole(long userId, String role);
+
+    @Modifying
+    @Query(value = "DELETE FROM USER_ROLES WHERE USER_ID = ?1 AND ROLE = ?2", nativeQuery = true)
+    void deleteRole(long userId, String role);
 }
