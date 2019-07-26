@@ -39,7 +39,7 @@
                 <constraints nullable="false" uniqueConstraintName="UK_TIME_COMMENT"/>
             </column>
 
-            <column name="DESCRIPTION" type="VARCHAR(255)">
+            <column name="DESCRIPTION" type="VARCHAR(500)">
                 <constraints nullable="false" uniqueConstraintName="UK_DESCRIPTION_COMMENT"/>
             </column>
         </createTable>

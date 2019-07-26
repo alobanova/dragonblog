@@ -36,7 +36,7 @@
                 <constraints nullable="false" uniqueConstraintName="UK_DATE_POST"/>
             </column>
 
-            <column name="DESCRIPTION" type="VARCHAR(256)">
+            <column name="DESCRIPTION" type="VARCHAR(1200)">
                 <constraints nullable="false" uniqueConstraintName="UK_DESCRIPTION_POST"/>
             </column>
 
