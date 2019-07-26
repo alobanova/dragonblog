@@ -49,6 +49,10 @@ public class UserServiceImpl {
         return null;
     }
 
+    public void delete(long id) {
+        repository.deleteById(id);
+    }
+
     public void delete(UiUser uiUser) {
         repository.delete(converter.convertBack(uiUser));
     }
