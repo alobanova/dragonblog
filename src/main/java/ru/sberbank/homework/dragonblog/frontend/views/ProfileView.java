@@ -16,10 +16,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiPost;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.frontend.util.AvatarUtils;
 import ru.sberbank.homework.dragonblog.frontend.util.PostPanel;
+import ru.sberbank.homework.dragonblog.model.Role;
 import ru.sberbank.homework.dragonblog.security.SecurityUtils;
 import ru.sberbank.homework.dragonblog.service.CommentServiceImpl;
 import ru.sberbank.homework.dragonblog.service.PostServiceImpl;
@@ -62,8 +64,8 @@ public class ProfileView extends HorizontalLayout implements View {
         initRoot();
         initCurrentUser();
         initImagePanel();
-        initDeleteBtn();
         initInfoPanel();
+        initDeleteBtn();
         initPostsPanel();
     }
 
@@ -114,8 +116,29 @@ public class ProfileView extends HorizontalLayout implements View {
     }
 
     private void initDeleteBtn() {
-        Button delete = new Button("Удалить профиль");
-        imageLayout.addComponent(delete);
+        boolean admin = SecurityUtils.hasRole(Role.ADMIN);
+        boolean myProfile = user.getId().longValue() == userSecurity.getId().longValue();
+
+        if (myProfile || admin) {
+            Button delete = new Button("Удалить профиль");
+
+            if (myProfile) {
+                delete.addClickListener(e -> {
+                    service.delete(user);
+                    UI.getCurrent().getPage().setLocation("/logout");
+                });
+            } else {
+                delete.addClickListener(e -> {
+                    VaadinSession.getCurrent().setAttribute("deleted", user.getNickname());
+                    service.delete(user);
+                    UI.getCurrent().getNavigator().navigateTo(SearchView.NAME);
+                });
+            }
+            delete.setIcon(VaadinIcons.TRASH);
+            delete.setStyleName(ValoTheme.BUTTON_BORDERLESS);
+            nickLayout.addComponent(delete);
+            nickLayout.setComponentAlignment(delete, Alignment.TOP_CENTER);
+        }
     }
 
     private void initInfoPanel() {
@@ -252,6 +275,7 @@ public class ProfileView extends HorizontalLayout implements View {
         textArea.setSizeFull();
 
         Button create = new Button("Создать");
+        create.setStyleName("data-about");
 
         create.addClickListener((Button.ClickListener) event2 -> {
             String newDescription = textArea.getValue();

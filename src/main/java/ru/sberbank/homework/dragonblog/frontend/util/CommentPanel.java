@@ -9,6 +9,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import ru.sberbank.homework.dragonblog.frontend.model.UiComment;
 import ru.sberbank.homework.dragonblog.frontend.model.UiUser;
 import ru.sberbank.homework.dragonblog.frontend.views.ProfileView;
+import ru.sberbank.homework.dragonblog.model.Role;
+import ru.sberbank.homework.dragonblog.security.SecurityUtils;
 import ru.sberbank.homework.dragonblog.service.CommentServiceImpl;
 
 public class CommentPanel {
@@ -49,7 +51,8 @@ public class CommentPanel {
         commentLayout.addComponent(textLayout);
 
         if (comment.getAuthor().getId().equals(userSecurity.getId())
-                || user.getId().equals(userSecurity.getId())) {
+                || user.getId().equals(userSecurity.getId())
+                || SecurityUtils.hasRole(Role.ADMIN)) {
             commentLayout.addComponent(textArea);
             HorizontalLayout buttons = formButtonLayout();
             commentLayout.addComponent(buttons);
@@ -63,7 +66,8 @@ public class CommentPanel {
         initTextLayout();
 
         if (comment.getAuthor().getId().equals(userSecurity.getId())
-                || user.getId().equals(userSecurity.getId())) {
+                || user.getId().equals(userSecurity.getId())
+                || SecurityUtils.hasRole(Role.ADMIN)) {
             initTextArea();
             initButtonSave();
             initButtonDelete();
@@ -181,6 +185,7 @@ public class CommentPanel {
 
     private void initButtonSave() {
         save = new Button("Сохранить", this::updateComment);
+        save.setStyleName("data-about");
         save.setVisible(false);
     }
 
@@ -197,6 +202,7 @@ public class CommentPanel {
 
     private void initButtonCancel() {
         cancel = new Button("Отмена", this::cancelUpdateComment);
+        cancel.setStyleName("data-about");
         cancel.setVisible(false);
     }
 

@@ -53,7 +53,8 @@
                                  baseColumnNames="ID_AUTHOR"
                                  constraintName="FK_POST_ID_AUTHOR"
                                  referencedTableName="USERS"
-                                 referencedColumnNames="ID"/>
+                                 referencedColumnNames="ID"
+                                 onDelete="CASCADE"/>
 
         <rollback>
             <sql>

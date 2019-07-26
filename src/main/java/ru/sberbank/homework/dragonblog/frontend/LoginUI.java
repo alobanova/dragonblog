@@ -103,7 +103,7 @@ public class LoginUI extends UI {
         registerBtn = new Button("Регистрация");
         registerBtn.addClickListener(register());
         rememberMe = new CheckBox("запомнить меня");
-        loggedOutLabel = new Label("Вы вышли ненадолго, возвращайтесь снова!");
+        loggedOutLabel = new Label("возвращайтесь снова!");
 
         loggedOutLabel.setVisible(false);
         loginBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);

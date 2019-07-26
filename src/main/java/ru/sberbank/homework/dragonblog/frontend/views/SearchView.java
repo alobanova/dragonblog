@@ -3,7 +3,9 @@ package ru.sberbank.homework.dragonblog.frontend.views;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
@@ -40,6 +42,14 @@ public class SearchView extends VerticalLayout implements View {
         initSearchLayout();
         initUserLayout();
         initFavouriteView();
+
+        if (VaadinSession.getCurrent().getAttribute("deleted") != null) {
+            String deletedUsername = VaadinSession.getCurrent().getAttribute("deleted").toString();
+            Notification notif = new Notification("профиль " + deletedUsername + " удален");
+            notif.setPosition(Position.TOP_CENTER);
+            notif.setDelayMsec(2000);
+            notif.show(Page.getCurrent());
+        }
     }
 
     private void initSearchLayout() {
